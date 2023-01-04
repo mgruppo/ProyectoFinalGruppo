@@ -1,0 +1,12 @@
+/*estilos del footer para aplicar estilo de texto de derechos reservados e imagenes de redes*/
+//nesting para trabajar estilos de etiquetas padres con sus etiquetas hijos en el footer
+footer {
+    @include flex;
+    padding: 1rem;
+
+    .derechos {
+        .texto-derechos {
+            @include formato-parrafo(0.9rem,nth($colores-letras, 4), center);
+        }
+    }
+}

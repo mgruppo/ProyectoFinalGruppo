@@ -1,0 +1,21 @@
+//hoja de estilos de scss
+/*se utiliza mobile first, tomando como base iphone se*/
+/*en la Pre Entrega 1 no se trabaja con medidas de pantallas mayores*/
+//importamos reset
+@import "base/reset";
+//importamos los archivos secundarios
+//utilidades variables y mixin
+@import "utilidades/variables";
+@import "utilidades/mixin";
+//estilos del body
+@import "base/body";
+//importamos los archivos secundarios
+//utilidades extend
+@import "utilidades/extend";
+//importo los titulos y parrafos
+@import "base/tipografia";
+//partials de header y de footer
+@import "layout/header";
+@import "layout/footer";
+//paginas del sitio
+@import "html/index";

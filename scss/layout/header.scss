@@ -1,0 +1,6 @@
+/*estilo del header de los html para mejorar estilos del navbar utilizado y conocer la pagina vigente*/
+//nesting para trabajar estilos de etiquetas padres con sus etiquetas hijos en el header
+header {
+    @include flex;
+    text-align: center;
+}

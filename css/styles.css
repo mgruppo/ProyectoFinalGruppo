@@ -1,0 +1,78 @@
+@charset "UTF-8";
+/*se utiliza mobile first, tomando como base iphone se*/
+/*en la Pre Entrega 1 no se trabaja con medidas de pantallas mayores*/
+/*reset de estilos*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+/*se utilizan variables para color de fondo y letras, tipografia y tamaño de las mismas*/
+/*se trabaja con mixin para reutilizar codigo*/
+/*estilos generales del body en cuanto a tipografia y color de fondo y gradiente*/
+body {
+  font-family: "Roboto", sans-serif;
+  background: #7269bd;
+  background: linear-gradient(to right, #7269bd, #536cb4, #3c6da6, #316b94, #346782); }
+
+/*se utiliza extend para extender los estilos de margenes, sombra, span y aumentar tamaño de objetos en escala*/
+.titulo-1, .titulo-2, .titulo-3 {
+  margin: 0.5rem;
+  padding: 1rem; }
+
+.parrafo-principal, .parrafo-secundario {
+  padding: 1.5rem;
+  margin: 0.5rem; }
+
+/*estilo de las tipografias y parramos principal y secundario, segun varibles*/
+.titulo-1 {
+  font-size: 2.2rem;
+  color: whitesmoke;
+  text-align: auto;
+  text-shadow: 0.3px 0.2px 0.2px whitesmoke;
+  font-weight: bold; }
+
+.titulo-2 {
+  font-size: 1.8rem;
+  color: #f0f7f3;
+  text-align: center;
+  text-shadow: 0.3px 0.2px 0.2px #f0f7f3; }
+
+.titulo-3 {
+  font-size: 1.6rem;
+  color: #e1ebe5;
+  text-align: center;
+  text-shadow: 0.3px 0.2px 0.2px #e1ebe5; }
+
+.parrafo-principal {
+  font-size: 1.2rem;
+  color: white;
+  text-align: center; }
+
+.parrafo-secundario {
+  font-size: 1.1rem;
+  color: white;
+  text-align: center; }
+
+/*estilo del header de los html para mejorar estilos del navbar utilizado y conocer la pagina vigente*/
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center; }
+
+/*estilos del footer para aplicar estilo de texto de derechos reservados e imagenes de redes*/
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem; }
+  footer .derechos .texto-derechos {
+    font-size: 0.9rem;
+    color: white;
+    text-align: center; }
+
+.principal {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }

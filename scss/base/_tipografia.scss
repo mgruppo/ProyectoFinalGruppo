@@ -1,0 +1,26 @@
+/*estilo de las tipografias y parramos principal y secundario, segun varibles*/
+.titulo-1 {
+    @include formato-titulo(nth($medidas-textos, 1), nth($colores-letras, 1), auto, nth($colores-letras, 1));
+    font-weight: bold;
+    @extend %estilos-margenes;
+}
+
+.titulo-2 {
+    @include formato-titulo(nth($medidas-textos, 2), nth($colores-letras, 2), center, nth($colores-letras, 2));
+    @extend %estilos-margenes;
+}
+
+.titulo-3 {
+    @include formato-titulo(nth($medidas-textos, 3), nth($colores-letras, 3), center, nth($colores-letras, 3));
+    @extend %estilos-margenes;
+}
+
+.parrafo-principal {
+    @include formato-parrafo(nth($medidas-textos, 4), nth($colores-letras, 4), center);
+    @extend %estilos-margenes-parrafos;
+}
+
+.parrafo-secundario {
+    @include formato-parrafo(nth($medidas-textos, 5), nth($colores-letras, 4), center);
+    @extend %estilos-margenes-parrafos;
+}

@@ -1,0 +1,19 @@
+//para reutilizar codigo aplico mixin
+//mixin con parametros
+/*se trabaja con mixin para reutilizar codigo*/
+@mixin formato-parrafo($size, $color, $align) {
+    font-size: $size;
+    color: $color;
+    text-align: $align;
+}
+//llamo al formato parrafo, pero incluyo sombra para el titulo
+@mixin formato-titulo($size, $color, $align, $color-shadow) {
+    @include formato-parrafo($size, $color, $align);
+    text-shadow: 0.3px 0.2px 0.2px $color-shadow;   
+}
+//mixin sin parametros
+@mixin flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

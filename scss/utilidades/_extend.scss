@@ -1,0 +1,18 @@
+//extend para extender los estilos en distintas etiquetas
+/*se utiliza extend para extender los estilos de margenes, sombra, span y aumentar tamaño de objetos en escala*/
+%estilos-margenes {
+    margin: 0.5rem;
+    padding: 1rem;
+}
+
+%estilos-margenes-parrafos {
+    padding: 1.5rem;
+    margin: 0.5rem;
+}
+
+%estilos-sombra {
+    width: 90%;
+    height: 95%;
+    margin: 0.3rem;
+    filter: drop-shadow(7px 5px 5px);
+}
