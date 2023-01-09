@@ -4,19 +4,20 @@ la plataforma le recomienda posibilidades de pagar con tarjeta, tomar credito o 
 
 //primero declaro constantes y variables globales e inicializo, puedo inicializar despues
 /*defino como constante la tasa de referencia para el plazo fijo, debido a que no cambia en el presente programa,
-al igual que el fondo comun de Mercado Libre, se deberia tomar de algun servicio web a futuro*/
+al igual que el fondo comun de Mercado Libre, se deberia tomar de algun servicio web a futuro, de lo contrario quedan como constante*/
 const tasaPlazoFijo = 0.75; //tasa de plazo fijo (Tasa Nominal Anual)
-const tasaMercadoLibre = 0.62; //tasa de fondo comun (Tasa Nominal Anual)
+const tasaFondoComun = 0.62; //tasa de fondo comun (Tasa Nominal Anual)
 const mensajeSalida = "salir" //para salir de la ejecucion
 let tasaTarjeta6 = 0.15;
 let tasaTarjeta12 = 0.24;
+//variables de eleccion de viaje
 let nombre = "";
 let eleccion = 0;
 let eleccionLetras = "";
+let nombrePlan = "";
 let cantidadCorrecta = false;
 let cantidadCuotas = 0;
 let eleccionCuotas = "";
-let nombrePlan = "";
 let montoGasto = 0;
 
 //funciones
@@ -30,8 +31,60 @@ function esTextoVacio(texto) {
     }
 }
 
+//función anónima
+//para devolver la tasa de interes necesaria, debido a que pueden ser muchas en un futuro
+let valorInteres = (opcion) => {
+    switch (opcion) {
+        case 1:
+            return tasaPlazoFijo
+        case 2:
+            return tasaFondoComun
+        case 3:
+            return tasaTarjeta6
+        case 4:
+            return tasaTarjeta12
+        default:
+            return 0
+    }
+}
 
-//funciones anonimas
+//como el calculo de interes es igual, se utiliza para gasto, como para ganancia
+function interes(importe, interes, cantidadMeses) {
+    let valorResultado = 0
+    for (let i = 1; i <= cantidadMeses; i++) {
+        valorResultado = valorResultado + (importe * (interes / 12))
+    }
+    return valorResultado
+}
+
+
+function calcular(cantidadCuotas, montoGasto) {
+    /*la idea es que: no importa las cuotas que seleccione el usuario
+    pero en base a las opciones, mostrarle al usuario las ventajas de invertir el dimero un plazo fijo
+    o en un fondo común de inversión y con el valor de los intereses pagar la cuota.
+    Esto es recomendable, siempre y cuando el valor de las cuotas no supere el valor de inflación (próximo paso en próximas entregas)*/
+    //calculamos el interese que cobra la tarjeta en 6 cuotas
+    let valorCuotas6 = interes(montoGasto, valorInteres(3), 6);
+    alert("El valor de intereses para 6 cuotas es: " + valorCuotas6)
+    valorCuotas6 = valorCuotas6 + montoGasto
+    alert("El costo total en 6 cuotas es de : " + valorCuotas6)
+    //calculamos el interese que cobra la tarjeta en 12 cuotas
+    let valorCuotas12 = interes(montoGasto, valorInteres(4), 12);
+    alert("El valor de intereses para 12 cuotas es: " + valorCuotas12)
+    valorCuotas12 = valorCuotas12 + montoGasto
+    alert("El costo total en 12 cuotas es de : " + valorCuotas12)
+    
+    //calculamos el interes ganado en plazo fijo y fondo comun en 6 meses
+    let valorPlazoFijo6 = interes(montoGasto, valorInteres(1), 6);
+    let valorFondoComun6 = interes(montoGasto, valorInteres(2), 6);
+    alert("El valor que ganarias de intereses en un plazo fijo de 6 meses es: " + valorPlazoFijo6)
+    alert("El valor que ganarias de intereses en un fondo comun de 6 meses es: " + valorFondoComun6)
+    let valorPlazoFijo12 = interes(montoGasto, valorInteres(1), 12);
+    let valorFondoComun12 = interes(montoGasto, valorInteres(2), 12);
+    alert("El valor que ganarias de intereses en un plazo fijo de 12 meses es: " + valorPlazoFijo12)
+    alert("El valor que ganarias de intereses en un fondo comun de 12 meses es: " + valorFondoComun12)
+
+}
 
 //logica de codigo
 //saludo
@@ -40,7 +93,7 @@ alert("Bienvenido a la plataforma de decisión financiera");
 //solicitud de nombre, para pertenencia en el resultado
 
 
-//validacion de nombre con do while
+//validacion de nombre de la persona con do while
 do {
     nombre = prompt("Por favor, ingresa tu nombre para continuar \nEscriba salir para abandonar el programa");
     if (nombre == "") {
@@ -53,8 +106,8 @@ do {
 
 if ((nombre != "") && (nombre.toLowerCase() != mensajeSalida)) {
     console.log("nombre" + " " + nombre);
-    //casteo el numero de la eleccion, por defecto 0 es sin eleccion y debe elegir
-    eleccion = Number(prompt("Contanos, ¿cual es tu deseo financiero? Ingresa el número de la opción pra continuar \nIngresa 1 para Viaje, \nIngresa 2 para Electronica, \nIngresa 3 para Ropa, \nIngresa 4 para Otro"));
+    //casteo el numero de la eleccion, por defecto es el valor 0 (sin eleccion) y se asigna nombre otros, de lo contrario se establece entre las opciones
+    eleccion = Number(prompt("Contanos, ¿cuál es tu deseo financiero? Ingresa el número de la opción pra continuar \nIngresa 1 para Viaje, \nIngresa 2 para Electronica, \nIngresa 3 para Ropa, \nIngresa 4 para Otro"));
     switch (eleccion) {
         case 1:
             eleccionLetras = "Viaje";
@@ -65,18 +118,23 @@ if ((nombre != "") && (nombre.toLowerCase() != mensajeSalida)) {
         case 3:
             eleccionLetras = "Ropa";
             break;
-        default:
+        case 4:
             eleccionLetras = "Otro";
             break;
+        default:
+            //por el momento dejo la opcion por defecto, puede ser una categoria otros e ingresar algun nombre o cambiar la logica para elegir entre el combo anterior
+            eleccionLetras = "Otra opción";
+            break;
     }
-
+    //definir un nombre del plan para hacerlo mas personalizado
     nombrePlan = prompt(`1 - Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
     while (esTextoVacio(nombrePlan) == false) {
         nombrePlan = prompt(`2 - Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
         console.log("nombrePlan ", nombrePlan)
     }
 
-    //validacion de monto con do while
+    //validacion de monto con do while, por defecto el programa funcionara si el valor es entre 1000 y 2 millones, de lo contrario no continua
+    //se establece el supuesto que mayor a 2 millones debe contratar un plan personalizado que no se plantea es esta etapa
     do {
         montoGasto = Number(prompt("¿Cuál es el monto total del gasto que deseas?"));
         console.log(typeof (montoGasto))
@@ -86,34 +144,38 @@ if ((nombre != "") && (nombre.toLowerCase() != mensajeSalida)) {
             console.log("esta entre 1000 y 2000000")
             //puedo trabajar en el asesoramiento
             do {
-            cantidadCuotas = Number(prompt("Contanos, ¿en cuantas cuotas pensas financiarlo? Ingresa el número de la opción pra continuar \nIngresa 1 para 1 cuota, \nIngresa 2 para 6 cuotas, \nIngresa 3 para 12 cuotas"));
-            switch (cantidadCuotas) {
-                case 1:
-                    eleccionCuotas = "1 Cuota";
-                    cantidadCorrecta = true;
-                    break;
-                case 2:
-                    eleccionCuotas = "6 Cuota";
-                    cantidadCorrecta = true;
-                    break;
-                case 3:
-                    eleccionCuotas = "12 Cuota";
-                    cantidadCorrecta = true;
-                    break;
-                default:
-                    eleccionCuotas = "Cantidad incorrecta";
-                    cantidadCorrecta = false;
-                    break;
+                cantidadCuotas = Number(prompt("Contanos, ¿en cuantas cuotas pensas financiarlo? Ingresa el número de la opción pra continuar \nIngresa 1 para 1 cuota, \nIngresa 2 para 6 cuotas, \nIngresa 3 para 12 cuotas"));
+                switch (cantidadCuotas) {
+                    case 1:
+                        eleccionCuotas = "1 Cuota";
+                        cantidadCorrecta = true;
+                        break;
+                    case 2:
+                        eleccionCuotas = "6 Cuotas";
+                        cantidadCorrecta = true;
+                        break;
+                    case 3:
+                        eleccionCuotas = "12 Cuotas";
+                        cantidadCorrecta = true;
+                        break;
+                    default:
+                        eleccionCuotas = "Cantidad incorrecta, por favor vuelva a selecionar entre las opciones correctas";
+                        cantidadCorrecta = false;
+                        break;
                 }
             }
             while (cantidadCorrecta == false);
-            console.log(eleccionCuotas, " - ", cantidadCorrecta)  
+            console.log(eleccionCuotas, " - ", cantidadCorrecta)
+            alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
+            calcular(cantidadCuotas, montoGasto);
+
         } else {
             //incluir variable boolenas
             let esMayor = (montoGasto > 2000000)
             if (esMayor) {
                 alert("Lamentamos no poder ayudarte, estamos trabajando para lograr asesorarte en montos grandes de dinero");
             } else {
+                alert("Lamentamos no poder ayudarte, el monto es menor a $1000");
                 console.log("No esta entre 1000 y 2000000")
             }
         }
