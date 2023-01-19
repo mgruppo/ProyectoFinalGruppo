@@ -8,8 +8,42 @@ al igual que el fondo comun de Mercado Libre, se deberia tomar de algun servicio
 const tasaPlazoFijo = 0.75; //tasa de plazo fijo (Tasa Nominal Anual)
 const tasaFondoComun = 0.62; //tasa de fondo comun (Tasa Nominal Anual)
 const mensajeSalida = "salir" //para salir de la ejecucion
+const planes = [];
+//agrego los días para comparar, los días sabado y domingo no se permite realizar inversiones
+const dias = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
+
 let tasaTarjeta6 = 0.15;
 let tasaTarjeta12 = 0.24;
+
+//muestro las opciones de inversion
+const tasasInversion = [{
+    id: 1,
+    descripcion: "Plazo Fijo",
+    valor: 0.75
+}, {
+    id: 2,
+    descripcion: "Fondo Común",
+    valor: 0.62
+}];
+//muestro las opciones de financiamiento en tarjeta
+const tasasTarjetas = [{
+    descripcion: "1 Cuota",
+    cantidad: 1,
+    valor: 0
+}, {
+    descripcion: "3 Cuotas",
+    cantidad: 3,
+    valor: 0
+}, {
+    descripcion: "6 Cuotas",
+    cantidad: 6,
+    valor: 0.15
+}, {
+    descripcion: "12 Cuotas",
+    cantidad: 12,
+    valor: 0.24
+}];
+
 //variables de eleccion de viaje
 let nombre = "";
 let eleccion = 0;
@@ -19,14 +53,8 @@ let cantidadCorrecta = false;
 let cantidadCuotas = 0;
 let eleccionCuotas = "";
 let montoGasto = 0;
+
 //funciones
-function esTextoVacio(texto) {
-    if (texto != "") {
-        return true
-    } else {
-        return false
-    }
-}
 //función anónima
 //para devolver la tasa de interes necesaria, debido a que pueden ser muchas en un futuro
 let valorInteres = (opcion) => {
@@ -76,20 +104,63 @@ function calcular(cantidadCuotas, montoGasto) {
     let valorFondoComun12 = interes(montoGasto, valorInteres(2), 12);
     console.log("El valor que ganarias de intereses en un plazo fijo de 12 meses es: " + valorPlazoFijo12)
     console.log("El valor que ganarias de intereses en un fondo comun de 12 meses es: " + valorFondoComun12)
+
+    //puede ser una funcion generar presupuesto o informe
+
     let mensajeFinal = `Elegiste pagar en ` + eleccionCuotas + `, pero sabias que pagando en ` + `\n 1 cuota, el gasto te saldría 1 desembolso unico de $` + montoGasto + `\n En 6 cuotas, te saldría $` + valorCuotas6 + ` y podrías descontar los intereses de un Fondo Común de Inversión $` + valorFondoComun6 + ` o los intereses de un Plazo Fijo $` + valorPlazoFijo6 + ` que podrias descontar en las cuotas mensualmente reinvirtiendo el capital únicamente` + `\n En 12 cuotas, te saldría $` + valorCuotas12 + ` y podrías descontar los intereses de un Fondo Común de Inversión $` + valorFondoComun12 + ` o los intereses de un Plazo Fijo $` + valorPlazoFijo12 + ` que podrias descontar en las cuotas mensualmente reinvirtiendo el capital únicamente`
     alert(mensajeFinal)
     console.log(mensajeFinal)
+
+    informe(mensajeFinal);
 }
+
+function informe(mensajeFinal) {
+    
+
+    
+    alert(mensajeFinal)
+    console.log(mensajeFinal)
+
+
+}
+
+//creo clase para definir el plan
+class Plan {
+    //nombre del plan
+    //tipo: 1 para Viaje, 2 para Electronica, 3 para Ropa, 4 para Otro
+    //monto: importe
+    //financiacion: 1 para 1 cuota sin interes, 2 para 6 cuotas con un interes, 3 para 12 cuotas
+    constructor(nombre, tipo, monto, financiacion) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.monto = parseFloat(monto);
+        this.financiacion = financiacion;
+        this.activo = true;
+    }
+    //agrego un metodo
+    cambiarActivo(activo) {
+        this.activo = activo;
+        return this.activo
+    }
+    cambiarFinanciacion(financiacion) {
+        this.financiacion = financiacion
+        return this.financiacion
+    }
+}
+
+
 //logica de codigo
 //saludo
-console.log("Bienvenido a la plataforma de decisión financiera");
 alert("Bienvenido a la plataforma de decisión financiera");
 //solicitud de nombre, para pertenencia en el resultado
 //validacion de nombre de la persona con do while
+
+
+
 do {
-    nombre = prompt("Por favor, ingresa tu nombre para continuar \nEscriba salir para abandonar el programa");
+    nombre = prompt(`Por favor, ingresa tu nombre para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
     if (nombre == "") {
-        alert("Por favor, ingresa un nombre válido para continuar \nEscriba salir para abandonar el programa")
+        alert(`Por favor, ingresa un nombre válido para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
     } else if (nombre.toLowerCase() == mensajeSalida) {
         //para salir de la condicion
         break
@@ -120,7 +191,7 @@ if ((nombre != "") && (nombre.toLowerCase() != mensajeSalida)) {
     if (eleccion >= 1 && eleccion <= 4) {
         //definir un nombre del plan para hacerlo mas personalizado
         nombrePlan = prompt(`1 - Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
-        while (esTextoVacio(nombrePlan) == false) {
+        while (nombrePlan == "") {
             nombrePlan = prompt(`2 - Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
             console.log("nombrePlan ", nombrePlan)
         }
@@ -158,6 +229,23 @@ if ((nombre != "") && (nombre.toLowerCase() != mensajeSalida)) {
                 while (cantidadCorrecta == false);
                 console.log(eleccionCuotas, " - ", cantidadCorrecta)
                 alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
+
+                //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
+                planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
+                console.log(planes)
+                
+                planes.toString();
+
+                for (let index = 0; index < planes.length; index++) {
+                    //alert (numeros[index]);
+                    console.log(planes[index]);
+                }
+
+                //controlar
+                // for(const plan1 of plan){
+                //     console.log(plan1.descripcion)
+                // }
+
                 calcular(cantidadCuotas, montoGasto);
             } else {
                 //incluir variable boolenas
