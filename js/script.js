@@ -1,6 +1,6 @@
-/*Para la pre entrega 1, y como idea de proyecto, se trabaja bajo la necesidad de contar con una plataforma
+/*Para la pre entrega 2, y como idea de proyecto, se trabaja bajo la necesidad de contar con una plataforma
 que dependiendo la elección de gasto que la persona desea realizar,
-la plataforma le recomienda posibilidades de pagar con tarjeta, tomar credito o elegir cuotas*/
+la plataforma le recomienda posibilidades de pagar con tarjeta, en una cuota o más o elegir invertir en un fondo común de inversión*/
 
 //primero declaro constantes y variables globales e inicializo, puedo inicializar despues
 /*defino como constante la tasa de referencia para el plazo fijo, debido a que no cambia en el presente programa,
@@ -30,10 +30,6 @@ const tasasTarjetas = [{
     cantidad: 1,
     valor: 0
 }, {
-    descripcion: "3 Cuotas",
-    cantidad: 3,
-    valor: 0
-}, {
     descripcion: "6 Cuotas",
     cantidad: 6,
     valor: 0.15
@@ -53,6 +49,9 @@ const proposito = [{
 }, {
     id: 3,
     tipo: "Ropa"
+}, {
+    id: 4,
+    tipo: "Otro"
 }];
 
 //variables de eleccion de viaje
@@ -92,41 +91,144 @@ let interes = (importe, interes, cantidadMeses) => {
     return valorResultado
 }
 
-let calcular = (cantidadCuotas, montoGasto) => {
+// let calcular = (cantidadCuotas, montoGasto) => {
+//     /*la idea es que: no importa las cuotas que seleccione el usuario
+//     pero en base a las opciones, mostrarle al usuario las ventajas de invertir el dimero un plazo fijo
+//     o en un fondo común de inversión y con el valor de los intereses pagar la cuota.
+//     Esto es recomendable, siempre y cuando el valor de las cuotas no supere el valor de inflación (próximo paso en próximas entregas)*/
+//     //calculamos el interese que cobra la tarjeta en 6 cuotas
+//     let valorCuotas6 = interes(montoGasto, valorInteres(3), 6);
+//     console.log("El valor de intereses para 6 cuotas es: " + valorCuotas6)
+//     valorCuotas6 = valorCuotas6 + montoGasto
+//     console.log("El costo total en 6 cuotas es de : " + valorCuotas6)
+//     //calculamos el interese que cobra la tarjeta en 12 cuotas
+//     let valorCuotas12 = interes(montoGasto, valorInteres(4), 12);
+//     console.log("El valor de intereses para 12 cuotas es: " + valorCuotas12)
+//     valorCuotas12 = valorCuotas12 + montoGasto
+//     console.log("El costo total en 12 cuotas es de : " + valorCuotas12)
+//     //calculamos el interes ganado en plazo fijo y fondo comun en 6 meses
+//     let valorPlazoFijo6 = interes(montoGasto, valorInteres(1), 6);
+//     let valorFondoComun6 = interes(montoGasto, valorInteres(2), 6);
+//     console.log("El valor que ganarias de intereses en un plazo fijo de 6 meses es: " + valorPlazoFijo6)
+//     console.log("El valor que ganarias de intereses en un fondo comun de 6 meses es: " + valorFondoComun6)
+//     let valorPlazoFijo12 = interes(montoGasto, valorInteres(1), 12);
+//     let valorFondoComun12 = interes(montoGasto, valorInteres(2), 12);
+//     console.log("El valor que ganarias de intereses en un plazo fijo de 12 meses es: " + valorPlazoFijo12)
+//     console.log("El valor que ganarias de intereses en un fondo comun de 12 meses es: " + valorFondoComun12)
+
+//     //puede ser una funcion generar presupuesto o informe
+
+//     let mensajeFinal = `Elegiste pagar en ` + eleccionCuotas + `, pero sabias que pagando en ` + `\n 1 cuota, el gasto te saldría 1 desembolso unico de $` + montoGasto + `\n En 6 cuotas, te saldría $` + valorCuotas6 + ` y podrías descontar los intereses de un Fondo Común de Inversión $` + valorFondoComun6 + ` o los intereses de un Plazo Fijo $` + valorPlazoFijo6 + ` que podrias descontar en las cuotas mensualmente reinvirtiendo el capital únicamente` + `\n En 12 cuotas, te saldría $` + valorCuotas12 + ` y podrías descontar los intereses de un Fondo Común de Inversión $` + valorFondoComun12 + ` o los intereses de un Plazo Fijo $` + valorPlazoFijo12 + ` que podrias descontar en las cuotas mensualmente reinvirtiendo el capital únicamente`
+//     //imprimo informe final
+//     informe(mensajeFinal);
+// }
+
+
+
+let calcular = (cantidadCuotas) => {
     /*la idea es que: no importa las cuotas que seleccione el usuario
-    pero en base a las opciones, mostrarle al usuario las ventajas de invertir el dimero un plazo fijo
-    o en un fondo común de inversión y con el valor de los intereses pagar la cuota.
+    pero en base a las opciones, mostrarle al usuario las ventajas de invertir el dinero en un plazo fijo
+    o en un fondo común de inversión o la opción que agregue y con el valor de los intereses pagar la cuota.
     Esto es recomendable, siempre y cuando el valor de las cuotas no supere el valor de inflación (próximo paso en próximas entregas)*/
     //calculamos el interese que cobra la tarjeta en 6 cuotas
-    let valorCuotas6 = interes(montoGasto, valorInteres(3), 6);
-    console.log("El valor de intereses para 6 cuotas es: " + valorCuotas6)
-    valorCuotas6 = valorCuotas6 + montoGasto
-    console.log("El costo total en 6 cuotas es de : " + valorCuotas6)
-    //calculamos el interese que cobra la tarjeta en 12 cuotas
-    let valorCuotas12 = interes(montoGasto, valorInteres(4), 12);
-    console.log("El valor de intereses para 12 cuotas es: " + valorCuotas12)
-    valorCuotas12 = valorCuotas12 + montoGasto
-    console.log("El costo total en 12 cuotas es de : " + valorCuotas12)
-    //calculamos el interes ganado en plazo fijo y fondo comun en 6 meses
-    let valorPlazoFijo6 = interes(montoGasto, valorInteres(1), 6);
-    let valorFondoComun6 = interes(montoGasto, valorInteres(2), 6);
-    console.log("El valor que ganarias de intereses en un plazo fijo de 6 meses es: " + valorPlazoFijo6)
-    console.log("El valor que ganarias de intereses en un fondo comun de 6 meses es: " + valorFondoComun6)
-    let valorPlazoFijo12 = interes(montoGasto, valorInteres(1), 12);
-    let valorFondoComun12 = interes(montoGasto, valorInteres(2), 12);
-    console.log("El valor que ganarias de intereses en un plazo fijo de 12 meses es: " + valorPlazoFijo12)
-    console.log("El valor que ganarias de intereses en un fondo comun de 12 meses es: " + valorFondoComun12)
+
+    //for of porque podría tener varios planes
+    for (const plancalculo of planes) {
+        if (plancalculo.activo) {
+            //tengo un plan activo, el cual debo calcular el interes y el costo de las tasas de inversion y de tarjeta
+            //primero calculo las tarjetas, las tasas estan en el array tasasTarjetas
+            let valorCuota = [];
+            for (let index = 0; index < tasasTarjetas.length; index++) {
+                valorCuota[index] = interes(parseFloat(plancalculo.monto), parseFloat(tasasTarjetas[index].valor), parseFloat(tasasTarjetas[index].cantidad));
+                console.log(`El valor de intereses para ${tasasTarjetas[index].cantidad} cuotas es: ` + valorCuota[index])
+                // let valorPlazoFijo12 = interes(montoGasto, valorInteres(1), 12);
+                // let valorFondoComun12 = interes(montoGasto, valorInteres(2), 12);
+                //por cada cantidad de cuotas, recorro la inversion y calculo cuanto ganaria de interes, salvo para 1 cuota que es automatico el pago
+                for (const tasa of tasasInversion) {
+                        valorInversion = interes(parseFloat(plancalculo.monto), parseFloat(tasa.valor), parseFloat(tasasTarjetas[index].cantidad));
+                        console.log(`El valor que ganarias de intereses en ${tasa.descripcion} con la cantidad de meses: ` + tasasTarjetas[index].cantidad + " meses es de " + valorInversion)
+                        let detalleFinanciacion = {
+                            cuotas: tasasTarjetas[index].cantidad,
+                            interesTarjeta: valorCuota[index],
+                            interesInversion: valorInversion,
+                            valorTotal: valorCuota[index] + plancalculo.monto - valorInversion
+                        };
+                        plancalculo.agregaDetalle(detalleFinanciacion);
+                }
+
+            }
+        }
+    }
+
+    // let valorCuotas6 = interes(montoGasto, valorInteres(3), 6);
+    // console.log("El valor de intereses para 6 cuotas es: " + valorCuotas6)
+    // valorCuotas6 = valorCuotas6 + montoGasto
+    // console.log("El costo total en 6 cuotas es de : " + valorCuotas6)
+    // //calculamos el interese que cobra la tarjeta en 12 cuotas
+    // let valorCuotas12 = interes(montoGasto, valorInteres(4), 12);
+    // console.log("El valor de intereses para 12 cuotas es: " + valorCuotas12)
+    // valorCuotas12 = valorCuotas12 + montoGasto
+    // console.log("El costo total en 12 cuotas es de : " + valorCuotas12)
+    // //calculamos el interes ganado en plazo fijo y fondo comun en 6 meses
+    // let valorPlazoFijo6 = interes(montoGasto, valorInteres(1), 6);
+    // let valorFondoComun6 = interes(montoGasto, valorInteres(2), 6);
+    // console.log("El valor que ganarias de intereses en un plazo fijo de 6 meses es: " + valorPlazoFijo6)
+    // console.log("El valor que ganarias de intereses en un fondo comun de 6 meses es: " + valorFondoComun6)
+    // let valorPlazoFijo12 = interes(montoGasto, valorInteres(1), 12);
+    // let valorFondoComun12 = interes(montoGasto, valorInteres(2), 12);
+    // console.log("El valor que ganarias de intereses en un plazo fijo de 12 meses es: " + valorPlazoFijo12)
+    // console.log("El valor que ganarias de intereses en un fondo comun de 12 meses es: " + valorFondoComun12)
 
     //puede ser una funcion generar presupuesto o informe
 
-    let mensajeFinal = `Elegiste pagar en ` + eleccionCuotas + `, pero sabias que pagando en ` + `\n 1 cuota, el gasto te saldría 1 desembolso unico de $` + montoGasto + `\n En 6 cuotas, te saldría $` + valorCuotas6 + ` y podrías descontar los intereses de un Fondo Común de Inversión $` + valorFondoComun6 + ` o los intereses de un Plazo Fijo $` + valorPlazoFijo6 + ` que podrias descontar en las cuotas mensualmente reinvirtiendo el capital únicamente` + `\n En 12 cuotas, te saldría $` + valorCuotas12 + ` y podrías descontar los intereses de un Fondo Común de Inversión $` + valorFondoComun12 + ` o los intereses de un Plazo Fijo $` + valorPlazoFijo12 + ` que podrias descontar en las cuotas mensualmente reinvirtiendo el capital únicamente`
+    //let mensajeFinal = "Hola" //`Elegiste pagar en ` + eleccionCuotas + `, pero sabias que pagando en ` + `\n 1 cuota, el gasto te saldría 1 desembolso unico de $` + montoGasto + `\n En 6 cuotas, te saldría $` + valorCuotas6 + ` y podrías descontar los intereses de un Fondo Común de Inversión $` + valorFondoComun6 + ` o los intereses de un Plazo Fijo $` + valorPlazoFijo6 + ` que podrias descontar en las cuotas mensualmente reinvirtiendo el capital únicamente` + `\n En 12 cuotas, te saldría $` + valorCuotas12 + ` y podrías descontar los intereses de un Fondo Común de Inversión $` + valorFondoComun12 + ` o los intereses de un Plazo Fijo $` + valorPlazoFijo12 + ` que podrias descontar en las cuotas mensualmente reinvirtiendo el capital únicamente`
     //imprimo informe final
-    informe(mensajeFinal);
+    //informe(mensajeFinal);
+    informe();
 }
 
-let informe = (mensajeFinal) => {
-    alert(mensajeFinal)
-    console.log(mensajeFinal)
+
+// let informe = (mensajeFinal) => {
+//     alert(mensajeFinal)
+//     console.log(mensajeFinal)
+// }
+
+let informe = () => {
+    
+
+    do {
+        let ordenResultado = Number(prompt("Contanos, ¿Cómo preferis ver el resultado? Ingresa el número de la opción para continuar \nIngresa 1 para ordernar por cuotas de menor a mayor, \nIngresa 2"));
+        switch (cantidadCuotas) {
+            case 1:
+                
+            //planInforme.detalleFinanciacion.sort((a, b) => a - b); //ascendente
+                cantidadCorrecta = true;
+                break;
+            case 2:
+                eleccionCuotas = "6 Cuotas";
+                cantidadCorrecta = true;
+                break;
+            case 3:
+                eleccionCuotas = "12 Cuotas";
+                cantidadCorrecta = true;
+                break;
+            default:
+                eleccionCuotas = "Cantidad incorrecta, por favor vuelva a selecionar entre las opciones correctas";
+                cantidadCorrecta = false;
+                break;
+        }
+    }
+    while (cantidadCorrecta == false);
+
+
+    //sort para ordenar un array, el metodo es destructivo, luego del orden cambia el lugar
+
+    //numero = [40, 1, 5, 200]
+    //numero.sort((a, b) => a - b); //ascendente
+    //numero.sort((a, b) => b - a); //descendente
+
+    //alert(mensajeFinal)
+    //console.log(mensajeFinal)
 }
 
 //AGREGAR
@@ -243,13 +345,7 @@ class Plan {
         this.activo = true;
         //agregar un arrays con el detalle de la financiacion, mes, interes, ganancia, pago cuota
         //esto se va a poder ordenar y visualizar entre ellos
-        this.detalleFinanciacion = {
-            mesNumero: 0,
-            interesTarjeta: 0,
-            interesInversion: 0,
-            valorTotal: 0
-        };
-
+        this.detalleFinanciacion = [];
     }
     //agrego un metodo de activo, para que cuando tenga varios planes, poder simular entre los activos
     cambiarActivo(activo) {
@@ -259,6 +355,15 @@ class Plan {
     cambiarFinanciacion(financiacion) {
         this.financiacion = financiacion
         return this.financiacion
+    }
+    agregaDetalle(detalle) {
+        this.detalleFinanciacion.push({
+            cuotas: detalle.cuotas,
+            interesTarjeta: detalle.interesTarjeta,
+            interesInversion: detalle.interesInversion,
+            valorTotal: detalle.valorTotal
+        })
+        return
     }
 }
 
@@ -429,15 +534,11 @@ if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
 
                 //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
                 planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
+
                 console.log("Imprimimos los planes")
                 console.log(planes);
                 console.log("Imprimimos los planes con toString")
                 planes.toString();
-
-                for (let index = 0; index < planes.length; index++) {
-                    //alert (numeros[index]);
-                    console.log(planes[index]);
-                }
 
                 //Para controlar si el usuario desea agregar una nueva tasa o eliminar otra
                 controlTasaInversion(tasasInversion);
@@ -447,7 +548,8 @@ if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
                 //     console.log(plan1.descripcion)
                 // }
 
-                calcular(cantidadCuotas, montoGasto);
+                //calcular(cantidadCuotas, montoGasto);
+                calcular(cantidadCuotas);
             } else {
                 //incluir variable boolenas
                 let esMayor = (montoGasto > 2000000)
