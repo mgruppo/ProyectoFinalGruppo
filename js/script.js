@@ -4,9 +4,39 @@ la plataforma le recomienda posibilidades de pagar con tarjeta, en una cuota o m
 
 const mensajeSalida = "salir" //para salir de la ejecucion
 const planes = []; //array de planes para que en proxima version pueda tener varios planes
+const inflacion = 0.95; //anual
 
-//agrego los días para comparar, los días sabado y domingo no se permite realizar inversiones, por eso no se incluyen
-const dias = ["lunes", "martes", "miercoles", "jueves", "viernes"]
+//agrego el arrays días para comparar, los días sabado y domingo no se permite realizar inversiones, por eso tienen en inversion false
+const dias = [{
+    descripcion: "lunes",
+    valor: 1,
+    inversion: true
+}, {
+    descripcion: "martes",
+    valor: 2,
+    inversion: true
+}, {
+    descripcion: "miércoles",
+    valor: 3,
+    inversion: true
+}, {
+    descripcion: "jueves",
+    valor: 4,
+    inversion: true
+}, {
+    descripcion: "viernes",
+    valor: 5,
+    inversion: true
+}, {
+    descripcion: "sábado",
+    valor: 6,
+    inversion: false
+}, {
+    descripcion: "domingo",
+    valor: 7,
+    inversion: false
+}];
+
 
 //muestro las opciones de inversion
 let tasasInversion = [{
@@ -41,8 +71,8 @@ let cantidadCuotas = 0;
 let eleccionCuotas = "";
 let montoGasto = 0;
 
-//funciones
 
+//funciones
 //como el calculo de interes es igual, se utiliza para gasto, como para ganancia
 let interes = (importe, interes, cantidadMeses) => {
     let valorResultado = 0
@@ -52,84 +82,78 @@ let interes = (importe, interes, cantidadMeses) => {
     return valorResultado
 }
 
+//funciones de orden superior
+//para calcular si la ganancia es mayor que la inflacion
+function mayorQue(n) {
+    return (m) => m > n
+}
+//si con la ganancia de los intereses le gano a la inflacion
+let mayorQueInflacion = mayorQue(inflacion)
+
 let calcular = () => {
     /*la idea es que: no importa las cuotas que seleccione el usuario
     pero en base a las opciones, mostrarle al usuario las ventajas de invertir el dinero en un plazo fijo
     o en un fondo común de inversión o la opción que agregue y con el valor de los intereses pagar la cuota.
-    Esto es recomendable, siempre y cuando el valor de las cuotas no supere el valor de inflación (próximo paso en próximas entregas)*/
+    Esto es recomendable, siempre y cuando el valor de las cuotas no supere el valor de inflación*/
     mensaje = ""
     let totalMenor = 0;
-    let detalleMenor = [];
-    for (const plancalculo of planes) {
-        if (plancalculo.activo) {
+    let mejorTasaValor = 0;
+    let mejorTasaDescripcion = "";
+    for (const planCalculo of planes) {
+        if (planCalculo.activo) {
             //tengo un plan activo, el cual debo calcular el interes y el costo de las tasas de inversion y de tarjeta
             //primero calculo las tarjetas, las tasas estan en el array tasasTarjetas
             let valorCuota = [];
             for (let index = 0; index < tasasTarjetas.length; index++) {
-                valorCuota[index] = interes(parseFloat(plancalculo.monto), parseFloat(tasasTarjetas[index].valor), parseFloat(tasasTarjetas[index].cantidad));
+                valorCuota[index] = interes(parseFloat(planCalculo.monto), parseFloat(tasasTarjetas[index].valor), parseFloat(tasasTarjetas[index].cantidad));
                 //por cada cantidad de cuotas, recorro la inversion y calculo cuanto ganaria de interes, salvo para 1 cuota que no tiene intereses
                 for (const tasa of tasasInversion) {
-                        valorInversion = interes(parseFloat(plancalculo.monto), parseFloat(tasa.valor), parseFloat(tasasTarjetas[index].cantidad));
-                        let detalleFinanciacion = {
-                            cuotas: tasasTarjetas[index].cantidad,
-                            interesTarjeta: valorCuota[index],
-                            detalleTarjeta: tasasTarjetas[index].descripcion,
-                            interesInversion: valorInversion,
-                            detalleInversion: tasa.descripcion,
-                            valorTotal: valorCuota[index] + plancalculo.monto - valorInversion
-                        };
-                        plancalculo.agregaDetalle(detalleFinanciacion);
-                        if (totalMenor == 0) {
-                            totalMenor = (valorCuota[index] + plancalculo.monto - valorInversion)
-                            detalleMenor = detalleFinanciacion
-                            mensaje = "La mejor alternativa es la opción de abonar con " + tasasTarjetas[index].descripcion + " y realizando la inversion de: " + tasa.descripcion + " si restamos las ganancias el total pagado es de " + totalMenor
-                        } else if ((valorCuota[index] + plancalculo.monto - valorInversion) < totalMenor) {
-                            totalMenor = (valorCuota[index] + plancalculo.monto - valorInversion)
-                            detalleMenor = detalleFinanciacion
-                            mensaje = "La mejor alternativa es la opción de abonar con " + tasasTarjetas[index].descripcion + " y realizando la inversion de: " + tasa.descripcion + " si restamos las ganancias el total pagado es de " + totalMenor
-                        } 
+                    valorInversion = interes(parseFloat(planCalculo.monto), parseFloat(tasa.valor), parseFloat(tasasTarjetas[index].cantidad));
+                    let detalleFinanciacion = {
+                        cuotas: tasasTarjetas[index].cantidad,
+                        interesTarjeta: valorCuota[index],
+                        detalleTarjeta: tasasTarjetas[index].descripcion,
+                        interesInversion: valorInversion,
+                        detalleInversion: tasa.descripcion,
+                        valorTotal: valorCuota[index] + planCalculo.monto - valorInversion
+                    };
+                    planCalculo.agregaDetalle(detalleFinanciacion);
+                    if (totalMenor == 0) {
+                        totalMenor = (valorCuota[index] + planCalculo.monto - valorInversion)
+                        mejorTasaValor = tasa.valor;
+                        mejorTasaDescripcion = tasa.descripcion;
+                        mensaje = "La mejor alternativa es la opción de abonar con " + tasasTarjetas[index].descripcion + " y realizando la inversion de: " + tasa.descripcion + ", si restamos las ganancias el total pagado es de " + totalMenor
+                    } else if ((valorCuota[index] + planCalculo.monto - valorInversion) < totalMenor) {
+                        totalMenor = (valorCuota[index] + planCalculo.monto - valorInversion)
+                        mejorTasaValor = tasa.valor;
+                        mejorTasaDescripcion = tasa.descripcion;
+                        mensaje = "La mejor alternativa es la opción de abonar con " + tasasTarjetas[index].descripcion + " y realizando la inversion de: " + tasa.descripcion + ", si restamos las ganancias el total pagado es de " + totalMenor
+                    }
                 }
-
             }
         }
+    }
+    let valorCondicion = mayorQueInflacion(mejorTasaValor)
+    if (valorCondicion == true) {
+        mensaje += "\nCon esta inversión además, le estás ganando a la inflación proyectada del año que es del " + (inflacion * 100) + "%. Excelente noticia!!"
+    } else {
+        mensaje += "\nCon esta inversión, No le estás ganando a la inflación proyectada del año que es del " + (inflacion * 100) + "%, pero te das un gusto :D"
     }
     informe(mensaje);
 }
 
 let informe = (mensajeFinal) => {
     alert(mensajeFinal)
-    
-}
-
-
-//funciones de orden superior
-//para calcular si la ganancia mensual es mayor que la inflacion
-function mayorQue(n) {
-    return (m) => m > n
-}
-
-//si con la ganancia de los intereses le gano a la inflacion mensual
-let inflacion = 0.4
-let mayorQueInflacion = mayorQue(inflacion)
-
-//ordenar por descripcion
-tasasTarjetas.sort((a, b) => {
-    if (a.descripcion > b.descripcion) {
-        return 1;
-    } else if (a.descripcion < b.descripcion) {
-        return -1;
+    //Date para buscar el día de hoy
+    const hoy = new Date();
+    const hoyDia = hoy.getDay(hoy); //1 es lunes y 7 domingo
+    let diaAptoInversion = dias.find((dia) => dia.valor === hoyDia);
+    if (diaAptoInversion.inversion == true) {
+        alert("Recorda que hoy es " + diaAptoInversion.descripcion + " y es un día hábil para invertir tu dinero")
     } else {
-        return 0;
+        alert("Recorda que hoy es " + diaAptoInversion.descripcion + " y No podes invertir tu dinero, agenda la inversión para el próximo día hábil")
     }
-})
-
-
-//Date
-const hoy = new Date();
-/*
-console.log(new Date())
-console.log(hoy.getDay()) //1 es lunes y 7 domingo
-*/
+}
 
 //creo clase para definir el plan
 class Plan {
@@ -143,8 +167,6 @@ class Plan {
         this.monto = parseFloat(monto);
         this.financiacion = financiacion;
         this.activo = true;
-        //agregar un arrays con el detalle de la financiacion, mes, interes, ganancia, pago cuota
-        //esto se va a poder ordenar y visualizar entre ellos
         this.detalleFinanciacion = [];
     }
     //agrego un metodo de activo, para que cuando tenga varios planes, poder simular entre los activos
@@ -248,9 +270,6 @@ let controlTasaInversion = (tasasInversion) => {
     alert(`Continuamos con las siguientes tasas:\n ${mensajeEleccion}`)
 }
 
-
-//logica de codigo
-//saludo
 alert("Bienvenido a la plataforma de decisión financiera");
 //solicitud de nombre, para pertenencia en el resultado
 //validacion de nombre de la persona con do while
@@ -259,7 +278,6 @@ do {
     if (nombre.trim() == "") {
         alert(`Por favor, ingresa un nombre válido para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
     } else if (nombre.toLowerCase() == mensajeSalida) {
-        //para salir de la condicion
         break
     }
 } while (nombre.trim() == "");
@@ -299,7 +317,7 @@ if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
             } else if (montoGasto >= 1000 && montoGasto <= 2000000) {
                 //puedo trabajar en el asesoramiento
                 do {
-                    cantidadCuotas = Number(prompt("Contanos, ¿en cuantas cuotas pensas financiarlo? Ingresa el número de la opción para continuar \nIngresa 1 para 1 cuota sin interes, \nIngresa 2 para 6 cuotas" +  "\nIngresa 3 para 12 cuotas"));
+                    cantidadCuotas = Number(prompt("Contanos, ¿en cuantas cuotas pensas financiarlo? Ingresa el número de la opción para continuar \nIngresa 1 para 1 cuota sin interes, \nIngresa 2 para 6 cuotas" + "\nIngresa 3 para 12 cuotas"));
                     switch (cantidadCuotas) {
                         case 1:
                             eleccionCuotas = "1 Cuota";
