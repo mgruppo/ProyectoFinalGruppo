@@ -16,7 +16,7 @@ body {
   background: linear-gradient(to right, #7269bd, #536cb4, #3c6da6, #316b94, #346782); }
 
 /*se utiliza extend para extender los estilos de margenes, sombra, span y aumentar tamaño de objetos en escala*/
-.titulo-1, .titulo-2, .titulo-3 {
+.titulo-1, .titulo-2, .titulo-3, .principal .formulario {
   margin: 0.5rem;
   padding: 1rem; }
 
@@ -76,3 +76,15 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center; }
+  .principal .formulario {
+    text-align: center; }
+
+/*boton general, para igualar el formato de todos los botones*/
+.boton-principal {
+  background-color: #7c95b8;
+  font-family: "Roboto", sans-serif;
+  color: whitesmoke;
+  padding: 0.7rem;
+  /*para que el boton se despegue del fondo se utiliza box-shadow*/
+  box-shadow: 1px 1px 5px black;
+  text-shadow: 1px 1px 5px black; }

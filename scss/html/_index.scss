@@ -1,4 +1,9 @@
 //estilos del index principal
 .principal {
     @include flex;
+    
+    .formulario {
+        text-align: center;
+        @extend %estilos-margenes;
+    }
 }

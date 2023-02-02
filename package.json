@@ -1,7 +1,7 @@
 {
-  "name": "preentrega2gruppo",
-  "version": "1.1.0",
-  "description": "preentrega numero 2 del curso de javascript",
+  "name": "preentrega3gruppo",
+  "version": "1.2.0",
+  "description": "preentrega numero 3 del curso de javascript",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mgruppo/PreEntrega2Gruppo.git"
+    "url": "https://github.com/mgruppo/PreEntrega3Gruppo.git"
   },
   "author": "mariano gruppo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mgruppo/PreEntrega2Gruppo/issues"
+    "url": "https://github.com/mgruppo/PreEntrega3Gruppo/issues"
   },
-  "homepage": "https://github.com/mgruppo/PreEntrega2Gruppo#readme",
+  "homepage": "https://github.com/mgruppo/PreEntrega3Gruppo#readme",
   "devDependencies": {
     "node-sass": "^8.0.0",
     "nodemon": "^2.0.20"
