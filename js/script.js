@@ -33,7 +33,7 @@ const dias = [{
     inversion: false
 }, {
     descripcion: "domingo",
-    valor: 7,
+    valor: 0,
     inversion: false
 }];
 
@@ -152,10 +152,11 @@ let informe = (mensajeFinal) => {
     } else {
         alert("Recorda que hoy es " + diaAptoInversion.descripcion + " y No podes invertir tu dinero, agenda la inversión para el próximo día hábil")
     }
-
-    let impResultado = document.getElementById("resultado-simulacion");
-    impResultado.innerHTML = mensajeFinal;
-
+    if (mensajeFinal.trim() != "") {
+        let classEvento = "parrafo-secundario";
+        datosResultados = document.getElementById("resultado-simulacion");
+        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeFinal;
+    }
 }
 
 //creo clase para definir el plan
@@ -193,6 +194,25 @@ class Plan {
         return
     }
 }
+
+//class Usuario, para gestionar al perfil del inversor o cliente
+class Usuario {
+    constructor(nombre) {
+        this.nombre = nombre;
+        this.activo = true;
+    }
+    setNombre(nuevoNombre) {
+        if (nombre != '') {
+            this.nombre = nuevoNombre
+            return this.nombre
+        }
+    }
+    setActivo(activo) {
+        this.activo = activo;
+        return this.activo
+    }
+}
+
 
 //for para mostrar los valores por defecto de las tasas
 let tasaMensaje = (tasaReferencia) => {
@@ -275,7 +295,35 @@ let controlTasaInversion = (tasasInversion) => {
 
 //alert("Bienvenido a la plataforma de decisión financiera");
 
-//solicitud de nombre, para pertenencia en el resultado
+//busco en localStorage el objeto y hago un parse para que Javascript me devuelva un objeto
+//eso es porque si guardo el nombre, brindo una mejor experiencia al inicio nuevamente
+let usurioLocalStorage = JSON.parse(localStorage.getItem("usuario"))
+
+if (usurioLocalStorage) { //Si Nombre tiene contenido, entonces lo muestro
+    let usuario = new Usuario(usurioLocalStorage.nombre)
+    asignarValoresInputs(usuario)
+} else {
+    let usuario = new Usuario('')
+    asignarValoresInputs(usuario)
+}
+
+function asignarValoresInputs(usuario) {
+    if (usuario.nombre != '') {
+        document.getElementById("bienvenida").innerHTML = `Bienvenido ${usuario.nombre}, nos alegra volverte a ver, para ayudarte a elegir la mejor manera de financiar tus gastos`
+        document.getElementById("impNomPersona").value = usuario.nombre
+        document.getElementById("impCheckDatos").checked = true;
+    }
+}
+
+function grabarStorage() {
+    let nomPersona = document.getElementById("impNomPersona").value
+    let checkDatos = document.getElementById("impCheckDatos").checked;
+    localStorage.setItem("usuario", JSON.stringify({
+        nombre: nomPersona
+    }))    
+}
+
+
 //validacion de nombre de la persona con do while
 
 /*
@@ -285,7 +333,8 @@ Inicio Agregado control por form
 let simulaForm = document.getElementById("form-simulacion");
 simulaForm.addEventListener("submit", validarFormulario);
 
-function validarFormulario(e){
+function validarFormulario(e) {
+
     e.preventDefault();
     // let nomPersona = document.getElementById("impNomPersona");
     // let SelDeseo = document.getElementById("impSelDeseo");
@@ -301,19 +350,23 @@ function validarFormulario(e){
     // //Obtengo el valor del segundo hijo <input type="number"> 
     // console.log(formulario.children[1].value);
 
-    datos(e)
+    datos(e);
 
+    let checkDatos = document.getElementById("impCheckDatos".value)
+    if (document.getElementById("impCheckDatos").checked) {
+         grabarStorage() 
+     }
 }
 
 function datos(e) {
     let mensajeError = ""
+    //inicializo en vacío donde iría la carga del resultado
+    let datosResultados = document.getElementById("resultado-simulacion");
+    datosResultados.innerHTML = '';
 
     nombre = e.srcElement[0].value;
-    if (nombre.trim() == "") {
-        mensajeError = "Por favor, ingresa un nombre válido para continuar";
-    }
     if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
-        //casteo el numero de la eleccion, por defecto es el valor 0 (sin eleccion) y se asigna nombre otros, de lo contrario se establece entre las opciones
+        //casteo el numero de la eleccion, se debe elegir una de las opciones para continuar
         eleccion = Number(e.srcElement[1].value);
         switch (eleccion) {
             case 1:
@@ -338,57 +391,74 @@ function datos(e) {
             nombrePlan = e.srcElement[2].value;
             if (nombrePlan.trim() == "") {
                 mensajeError = `Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`
-            }
-            //validacion de monto con do while, por defecto el programa funcionara si el valor es entre 1000 y 2 millones, de lo contrario no continua
-            //se establece el supuesto que mayor a 2 millones debe contratar un plan personalizado que no se plantea es esta etapa
-        
-            montoGasto = Number(e.srcElement[3].value);
+            } else {
+                //validacion de monto, por defecto el programa funcionara si el valor es entre 1000 y 2 millones, de lo contrario no continua
+                //se establece el supuesto que mayor a 2 millones debe contratar un plan personalizado que no se plantea es esta etapa
+                montoGasto = Number(e.srcElement[3].value);
                 if (typeof (montoGasto) != "number") {
                     mensajeError = "Ingrese un valor de tipo numerico";
                 } else if (montoGasto >= 1000 && montoGasto <= 2000000) {
                     //puedo trabajar en el asesoramiento
+                    cantidadCuotas = Number(e.srcElement[4].value);
+                    switch (cantidadCuotas) {
+                        case 1:
+                            eleccionCuotas = "1 Cuota";
+                            break;
+                        case 2:
+                            eleccionCuotas = "6 Cuotas";
+                            break;
+                        case 3:
+                            eleccionCuotas = "12 Cuotas";
+                            break;
+                        default:
+                            mensajeError = "Cantidad de cuotas incorrecta, por favor seleciona entre las opciones correctas";
+                            break;
+                    }
 
-                        cantidadCuotas = Number(e.srcElement[4].value);
-                        switch (cantidadCuotas) {
-                            case 1:
-                                eleccionCuotas = "1 Cuota";
-                                break;
-                            case 2:
-                                eleccionCuotas = "6 Cuotas";
-                                break;
-                            case 3:
-                                eleccionCuotas = "12 Cuotas";
-                                break;
-                            default:
-                                mensajeError = "Cantidad incorrecta, por favor vuelva a selecionar entre las opciones correctas";
-                                break;
-                        }
+                    if (cantidadCuotas >= 1 && cantidadCuotas <= 3) {
+                        alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
+                        //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
+                        planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
+                        //Para controlar si el usuario desea agregar una nueva tasa o eliminar otra
+                        controlTasaInversion(tasasInversion);
+                        calcular();
+                    }
 
-                    alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
-                    //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
-                    planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
-                    //Para controlar si el usuario desea agregar una nueva tasa o eliminar otra
-                    controlTasaInversion(tasasInversion);
-                    calcular();
                 } else {
                     let esMayor = (montoGasto > 2000000)
                     if (esMayor) {
                         mensajeError = "Lamentamos no poder ayudarte, estamos trabajando para lograr asesorarte en montos grandes de dinero, superiores a 2 millones";
+                    } else if (montoGasto == 0) {
+                        mensajeError = "Por favor, ingresá un monto del gasto, para que podamos ayudarte";
                     } else {
-                        mensajeError = "Lamentamos no poder ayudarte, el monto es menor a $1000 \nRecorda que podemos ayudarte en valores mayores o iguales a 1000 y menor o igual a 2 millones";
+                        mensajeError = "Lamentamos no poder ayudarte, el monto es menor a $1000" + "\nRecorda que podemos ayudarte en valores mayores o iguales a 1000 y menor o igual a 2 millones";
                     }
                 }
             }
-        
+
         } else {
-            alert("Seleccionaste una opción incorrecta, por lo que no podemos ayudarte");
+            mensajeError = "Por favor, selecciona el deseo financiero, para que te podamos ayudarte";
         }
-    
-    
-    let impResultadoError = document.getElementById("error-simulacion");
-    impResultadoError.innerHTML = mensajeError;
-    
+
+    } else if (nombre.trim() == "") {
+        mensajeError = "Por favor, ingresa un nombre válido para continuar";
+    } else {
+        mensajeError = "Seleccionaste una opción incorrecta, por lo que no podemos ayudarte";
+    }
+
+
+
+    if (mensajeError.trim() != "") {
+        let classEvento = "parrafo-secundario-error";
+        datosResultados = document.getElementById("resultado-simulacion");
+        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeError;
+    }
+
+
+
 }
+
+
 
 /*
 Fin Agregado control por form
