@@ -20,7 +20,7 @@ body {
   margin: 0.5rem;
   padding: 1rem; }
 
-.parrafo-principal, .parrafo-secundario {
+.parrafo-principal, .parrafo-secundario, .parrafo-secundario-error {
   padding: 1.5rem;
   margin: 0.5rem; }
 
@@ -53,6 +53,12 @@ body {
   font-size: 1.1rem;
   color: white;
   text-align: center; }
+
+.parrafo-secundario-error {
+  font-size: 1.1rem;
+  color: #f58c8c;
+  text-align: center;
+  font-weight: bold; }
 
 /*estilo del header de los html para mejorar estilos del navbar utilizado y conocer la pagina vigente*/
 header {

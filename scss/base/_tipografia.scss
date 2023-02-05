@@ -24,3 +24,9 @@
     @include formato-parrafo(nth($medidas-textos, 5), nth($colores-letras, 4), center);
     @extend %estilos-margenes-parrafos;
 }
+
+.parrafo-secundario-error {
+    @include formato-parrafo(nth($medidas-textos, 5), rgb(245, 140, 140), center);
+    @extend %estilos-margenes-parrafos;
+    font-weight: bold;
+}

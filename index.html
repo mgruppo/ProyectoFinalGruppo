@@ -36,54 +36,58 @@
             <h2 class="p-h2-2 titulo-2">Simulador de ilusiones</h2>
             <!--Formulario de bootstrap-->
 
-            <form class="row g-3 formulario">
+            <form id="form-simulacion" class="row g-3 formulario">
                 <div class="form-floating mb-3 col-12">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="nombre-persona">
-                    <label for="floatingInput">Ingresa tu nombre</label>
+                    <input type="text" class="form-control" id="impNomPersona" placeholder="nombre-persona">
+                    <label for="impNomPersona">Ingresa tu nombre</label>
                 </div>
                 
                 <div class="form-floating mb-3 col-12">
-                    <select class="form-select" id="floatingSelectGrid">
+                    <select class="form-select" id="impSelDeseo">
                         <option selected>Seleccione una opción</option>
                         <option value="1">Viaje</option>
                         <option value="2">Electrónica</option>
                         <option value="3">Ropa</option>
                         <option value="4">Otro</option>
                     </select>
-                    <label for="floatingSelectGrid">Deseo financiero</label>
+                    <label for="impSelDeseo">Deseo financiero</label>
                 </div>
                 <div class="form-floating mb-3 col-12">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="nombre-plan">
-                    <label for="floatingInput">Nombre del plan</label>
+                    <input type="text" class="form-control" id="impNomPlan" placeholder="nombre-plan">
+                    <label for="impNomPlan">Nombre del plan</label>
                 </div>
                 <div class="form-floating mb-3 col-6">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="precio-plan">
-                    <label for="floatingInput">Monto total del gasto</label>
+                    <input type="text" class="form-control" id="impPrecioPlan" placeholder="precio-plan">
+                    <label for="impPrecioPlan">Monto total del gasto</label>
                 </div>
                 <div class="form-floating mb-3 col-6">
-                    <select class="form-select" id="floatingSelectGrid">
+                    <select class="form-select" id="impSelCantCuotas">
                         <option selected>Seleccione una opción</option>
                         <option value="1">1 Cuota</option>
                         <option value="2">6 Cuotas</option>
                         <option value="3">12 Cuotas</option>
                     </select>
-                    <label for="floatingSelectGrid">Cantidad de Cuotas</label>
+                    <label for="impSelCantCuotas">Cantidad de Cuotas</label>
                 </div>
                 
                 <div class="col-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="autoSizingCheck">
-                        <label class="form-check-label" for="autoSizingCheck">
+                        <input class="form-check-input" type="checkbox" id="impCheckDatos">
+                        <label class="form-check-label" for="impCheckDatos">
                             Recordar mi nombre
                         </label>
                     </div>
                 </div>
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary boton-principal">Simular</button>
+                    <button id="btn-simular" type="submit" class="btn btn-primary boton-principal">Simular</button>
                 </div>
             </form>
-
-
+            <div class="p-error parrafo-secundario-error" id="error-simulacion">
+            </div>
+            <section>
+                <div class="p-uno parrafo-principal" id="resultado-simulacion">
+                </div>
+            </section>
 
         </main>
         <footer>
@@ -98,7 +102,7 @@
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
     </script>
     <!--link JavaScript propio-->
-    <!-- <script src="js/script.js"></script> -->
+    <script src="js/script.js"></script>
 </body>
 
 </html>

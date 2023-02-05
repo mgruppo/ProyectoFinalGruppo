@@ -66,7 +66,6 @@ let nombre = "";
 let eleccion = 0;
 let eleccionLetras = "";
 let nombrePlan = "";
-let cantidadCorrecta = false;
 let cantidadCuotas = 0;
 let eleccionCuotas = "";
 let montoGasto = 0;
@@ -153,6 +152,10 @@ let informe = (mensajeFinal) => {
     } else {
         alert("Recorda que hoy es " + diaAptoInversion.descripcion + " y No podes invertir tu dinero, agenda la inversión para el próximo día hábil")
     }
+
+    let impResultado = document.getElementById("resultado-simulacion");
+    impResultado.innerHTML = mensajeFinal;
+
 }
 
 //creo clase para definir el plan
@@ -270,91 +273,216 @@ let controlTasaInversion = (tasasInversion) => {
     alert(`Continuamos con las siguientes tasas:\n ${mensajeEleccion}`)
 }
 
-alert("Bienvenido a la plataforma de decisión financiera");
+//alert("Bienvenido a la plataforma de decisión financiera");
+
 //solicitud de nombre, para pertenencia en el resultado
 //validacion de nombre de la persona con do while
-do {
-    nombre = prompt(`Por favor, ingresa tu nombre para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
+
+/*
+Inicio Agregado control por form
+*/
+
+let simulaForm = document.getElementById("form-simulacion");
+simulaForm.addEventListener("submit", validarFormulario);
+
+function validarFormulario(e){
+    e.preventDefault();
+    // let nomPersona = document.getElementById("impNomPersona");
+    // let SelDeseo = document.getElementById("impSelDeseo");
+    // let nomPlan = document.getElementById("impNomPlan");
+    // let precioPlan = document.getElementById("impPrecioPlan");
+    // let cantCuotas = document.getElementById("impSelCantCuotas");
+    // let checkDatos = document.getElementById("impCheckDatos");
+
+    // //Obtenemos el elemento desde el cual se disparó el evento
+    // let formulario = e.target
+    // //Obtengo el valor del primero hijo <input type="text">
+    // console.log(formulario.children[0].value);
+    // //Obtengo el valor del segundo hijo <input type="number"> 
+    // console.log(formulario.children[1].value);
+
+    datos(e)
+
+}
+
+function datos(e) {
+    let mensajeError = ""
+
+    nombre = e.srcElement[0].value;
     if (nombre.trim() == "") {
-        alert(`Por favor, ingresa un nombre válido para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
-    } else if (nombre.toLowerCase() == mensajeSalida) {
-        break
+        mensajeError = "Por favor, ingresa un nombre válido para continuar";
     }
-} while (nombre.trim() == "");
-if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
-    //casteo el numero de la eleccion, por defecto es el valor 0 (sin eleccion) y se asigna nombre otros, de lo contrario se establece entre las opciones
-    eleccion = Number(prompt("Contanos " + nombre + ", ¿cuál es tu deseo financiero? Ingresa el número de la opción para continuar \nIngresa 1 para Viaje, \nIngresa 2 para Electronica, \nIngresa 3 para Ropa, \nIngresa 4 para Otro"));
-    switch (eleccion) {
-        case 1:
-            eleccionLetras = "Viaje";
-            break;
-        case 2:
-            eleccionLetras = "Electronica";
-            break;
-        case 3:
-            eleccionLetras = "Ropa";
-            break;
-        case 4:
-            eleccionLetras = "Otro";
-            break;
-        default:
-            //por el momento dejo la opcion por defecto, puede ser una categoria otros e ingresar algun nombre o cambiar la logica para elegir entre el combo anterior
-            eleccionLetras = "Otra opción";
-            break;
-    }
-    if (eleccion >= 1 && eleccion <= 4) {
-        //definir un nombre del plan para hacerlo mas personalizado
-        nombrePlan = prompt(`Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
-        while (nombrePlan.trim() == "") {
-            nombrePlan = prompt(`Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
+    if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
+        //casteo el numero de la eleccion, por defecto es el valor 0 (sin eleccion) y se asigna nombre otros, de lo contrario se establece entre las opciones
+        eleccion = Number(e.srcElement[1].value);
+        switch (eleccion) {
+            case 1:
+                eleccionLetras = "Viaje";
+                break;
+            case 2:
+                eleccionLetras = "Electronica";
+                break;
+            case 3:
+                eleccionLetras = "Ropa";
+                break;
+            case 4:
+                eleccionLetras = "Otro";
+                break;
+            default:
+                //por el momento dejo la opcion por defecto, puede ser una categoria otros e ingresar algun nombre o cambiar la logica para elegir entre el combo anterior
+                eleccionLetras = "Otra opción";
+                break;
         }
-        //validacion de monto con do while, por defecto el programa funcionara si el valor es entre 1000 y 2 millones, de lo contrario no continua
-        //se establece el supuesto que mayor a 2 millones debe contratar un plan personalizado que no se plantea es esta etapa
-        do {
-            montoGasto = Number(prompt("¿Cuál es el monto total del gasto que deseas para " + nombrePlan + "? \nRecorda que solamente podemos ayudarte, si ingresas valores entre 1000 (mil) y 2 millones"));
-            if (typeof (montoGasto) != "number") {
-                alert("Ingrese un valor de tipo numerico")
-            } else if (montoGasto >= 1000 && montoGasto <= 2000000) {
-                //puedo trabajar en el asesoramiento
-                do {
-                    cantidadCuotas = Number(prompt("Contanos, ¿en cuantas cuotas pensas financiarlo? Ingresa el número de la opción para continuar \nIngresa 1 para 1 cuota sin interes, \nIngresa 2 para 6 cuotas" + "\nIngresa 3 para 12 cuotas"));
-                    switch (cantidadCuotas) {
-                        case 1:
-                            eleccionCuotas = "1 Cuota";
-                            cantidadCorrecta = true;
-                            break;
-                        case 2:
-                            eleccionCuotas = "6 Cuotas";
-                            cantidadCorrecta = true;
-                            break;
-                        case 3:
-                            eleccionCuotas = "12 Cuotas";
-                            cantidadCorrecta = true;
-                            break;
-                        default:
-                            eleccionCuotas = "Cantidad incorrecta, por favor vuelva a selecionar entre las opciones correctas";
-                            cantidadCorrecta = false;
-                            break;
+        if (eleccion >= 1 && eleccion <= 4) {
+            //definir un nombre del plan para hacerlo mas personalizado
+            nombrePlan = e.srcElement[2].value;
+            if (nombrePlan.trim() == "") {
+                mensajeError = `Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`
+            }
+            //validacion de monto con do while, por defecto el programa funcionara si el valor es entre 1000 y 2 millones, de lo contrario no continua
+            //se establece el supuesto que mayor a 2 millones debe contratar un plan personalizado que no se plantea es esta etapa
+        
+            montoGasto = Number(e.srcElement[3].value);
+                if (typeof (montoGasto) != "number") {
+                    mensajeError = "Ingrese un valor de tipo numerico";
+                } else if (montoGasto >= 1000 && montoGasto <= 2000000) {
+                    //puedo trabajar en el asesoramiento
+
+                        cantidadCuotas = Number(e.srcElement[4].value);
+                        switch (cantidadCuotas) {
+                            case 1:
+                                eleccionCuotas = "1 Cuota";
+                                break;
+                            case 2:
+                                eleccionCuotas = "6 Cuotas";
+                                break;
+                            case 3:
+                                eleccionCuotas = "12 Cuotas";
+                                break;
+                            default:
+                                mensajeError = "Cantidad incorrecta, por favor vuelva a selecionar entre las opciones correctas";
+                                break;
+                        }
+
+                    alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
+                    //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
+                    planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
+                    //Para controlar si el usuario desea agregar una nueva tasa o eliminar otra
+                    controlTasaInversion(tasasInversion);
+                    calcular();
+                } else {
+                    let esMayor = (montoGasto > 2000000)
+                    if (esMayor) {
+                        mensajeError = "Lamentamos no poder ayudarte, estamos trabajando para lograr asesorarte en montos grandes de dinero, superiores a 2 millones";
+                    } else {
+                        mensajeError = "Lamentamos no poder ayudarte, el monto es menor a $1000 \nRecorda que podemos ayudarte en valores mayores o iguales a 1000 y menor o igual a 2 millones";
                     }
                 }
-                while (cantidadCorrecta == false);
-                alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
-                //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
-                planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
-                //Para controlar si el usuario desea agregar una nueva tasa o eliminar otra
-                controlTasaInversion(tasasInversion);
-                calcular();
-            } else {
-                let esMayor = (montoGasto > 2000000)
-                if (esMayor) {
-                    alert("Lamentamos no poder ayudarte, estamos trabajando para lograr asesorarte en montos grandes de dinero, superiores a 2 millones");
-                } else {
-                    alert("Lamentamos no poder ayudarte, el monto es menor a $1000 \nRecorda que podemos ayudarte en valores mayores o iguales a 1000 y menor o igual a 2 millones");
-                }
             }
+        
+        } else {
+            alert("Seleccionaste una opción incorrecta, por lo que no podemos ayudarte");
         }
-        while (montoGasto == 0);
-    } else {
-        alert("Seleccionaste una opción incorrecta, por lo que no podemos ayudarte");
-    }
+    
+    
+    let impResultadoError = document.getElementById("error-simulacion");
+    impResultadoError.innerHTML = mensajeError;
+    
 }
+
+/*
+Fin Agregado control por form
+*/
+
+// do {
+//     nombre = prompt(`Por favor, ingresa tu nombre para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
+//     if (nombre.trim() == "") {
+//         alert(`Por favor, ingresa un nombre válido para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
+//     } else if (nombre.toLowerCase() == mensajeSalida) {
+//         break
+//     }
+// } while (nombre.trim() == "");
+// if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
+//     //casteo el numero de la eleccion, por defecto es el valor 0 (sin eleccion) y se asigna nombre otros, de lo contrario se establece entre las opciones
+//     eleccion = Number(prompt("Contanos " + nombre + ", ¿cuál es tu deseo financiero? Ingresa el número de la opción para continuar \nIngresa 1 para Viaje, \nIngresa 2 para Electronica, \nIngresa 3 para Ropa, \nIngresa 4 para Otro"));
+//     switch (eleccion) {
+//         case 1:
+//             eleccionLetras = "Viaje";
+//             break;
+//         case 2:
+//             eleccionLetras = "Electronica";
+//             break;
+//         case 3:
+//             eleccionLetras = "Ropa";
+//             break;
+//         case 4:
+//             eleccionLetras = "Otro";
+//             break;
+//         default:
+//             //por el momento dejo la opcion por defecto, puede ser una categoria otros e ingresar algun nombre o cambiar la logica para elegir entre el combo anterior
+//             eleccionLetras = "Otra opción";
+//             break;
+//     }
+//     if (eleccion >= 1 && eleccion <= 4) {
+//         //definir un nombre del plan para hacerlo mas personalizado
+//         nombrePlan = prompt(`Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
+//         while (nombrePlan.trim() == "") {
+//             nombrePlan = prompt(`Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
+//         }
+//         //validacion de monto con do while, por defecto el programa funcionara si el valor es entre 1000 y 2 millones, de lo contrario no continua
+//         //se establece el supuesto que mayor a 2 millones debe contratar un plan personalizado que no se plantea es esta etapa
+//         do {
+//             montoGasto = Number(prompt("¿Cuál es el monto total del gasto que deseas para " + nombrePlan + "? \nRecorda que solamente podemos ayudarte, si ingresas valores entre 1000 (mil) y 2 millones"));
+//             if (typeof (montoGasto) != "number") {
+//                 alert("Ingrese un valor de tipo numerico")
+//             } else if (montoGasto >= 1000 && montoGasto <= 2000000) {
+//                 //puedo trabajar en el asesoramiento
+//                 do {
+//                     cantidadCuotas = Number(prompt("Contanos, ¿en cuantas cuotas pensas financiarlo? Ingresa el número de la opción para continuar \nIngresa 1 para 1 cuota sin interes, \nIngresa 2 para 6 cuotas" + "\nIngresa 3 para 12 cuotas"));
+//                     switch (cantidadCuotas) {
+//                         case 1:
+//                             eleccionCuotas = "1 Cuota";
+//                             cantidadCorrecta = true;
+//                             break;
+//                         case 2:
+//                             eleccionCuotas = "6 Cuotas";
+//                             cantidadCorrecta = true;
+//                             break;
+//                         case 3:
+//                             eleccionCuotas = "12 Cuotas";
+//                             cantidadCorrecta = true;
+//                             break;
+//                         default:
+//                             eleccionCuotas = "Cantidad incorrecta, por favor vuelva a selecionar entre las opciones correctas";
+//                             cantidadCorrecta = false;
+//                             break;
+//                     }
+//                 }
+//                 while (cantidadCorrecta == false);
+//                 alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
+//                 //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
+//                 planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
+//                 //Para controlar si el usuario desea agregar una nueva tasa o eliminar otra
+//                 controlTasaInversion(tasasInversion);
+//                 calcular();
+//             } else {
+//                 let esMayor = (montoGasto > 2000000)
+//                 if (esMayor) {
+//                     alert("Lamentamos no poder ayudarte, estamos trabajando para lograr asesorarte en montos grandes de dinero, superiores a 2 millones");
+//                 } else {
+//                     alert("Lamentamos no poder ayudarte, el monto es menor a $1000 \nRecorda que podemos ayudarte en valores mayores o iguales a 1000 y menor o igual a 2 millones");
+//                 }
+//             }
+//         }
+//         while (montoGasto == 0);
+//     } else {
+//         alert("Seleccionaste una opción incorrecta, por lo que no podemos ayudarte");
+//     }
+// }
+
+
+// let botonSimular = document.getElementById("btn-simular");
+
+// botonSimular.addEventListener("click", () => {
+//     alert("Es una prueba");
+// })
