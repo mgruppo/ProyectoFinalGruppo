@@ -6,4 +6,23 @@
         text-align: center;
         @extend %estilos-margenes;
     }
+
+    .box-recorda {
+        text-align: left;
+        color: white;
+    }
+
+    .section-1 {
+        .resultado-1 {
+            span {
+                font-weight: bold;
+            }
+        }
+    }
+
+    .section-2 {
+        text-align: center;
+        @extend %estilos-margenes;
+    }
+
 }

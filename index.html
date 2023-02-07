@@ -28,20 +28,20 @@
             <h1 class="titulo-1">Tu asesor financiero</h1>
         </header>
         <main class="principal">
-            <h2 class="p-h2-1 titulo-2" id="bienvenida">Bienvenido, te ayudamos a elegir la mejor manera de financiar tus gastos</h2>
+            <h2 class="p-h2-1 titulo-2" id="bienvenida">Bienvenido, te ayudamos a elegir la mejor manera de financiar
+                tus gastos</h2>
             <!--parrafo informativo-->
             <p class="p-uno parrafo-principal">Creemos en una sociedad financieramente educada, trabajamos día a día
                 para lograrlo, permitiendote elegir la mejor manera de financiar tus gustos. En un país donde las
                 alternativsa de financiación son mayores que la propiedades del aloe vera estamos para ayudarte.</p>
             <h2 class="p-h2-2 titulo-2">Simulador de ilusiones</h2>
             <!--Formulario de bootstrap-->
-
             <form id="form-simulacion" class="row g-3 formulario">
                 <div class="form-floating mb-3 col-12">
                     <input type="text" class="form-control" id="impNomPersona" placeholder="nombre-persona">
                     <label for="impNomPersona">Ingresa tu nombre</label>
                 </div>
-                
+
                 <div class="form-floating mb-3 col-12">
                     <select class="form-select" id="impSelDeseo">
                         <option selected>Seleccione una opción</option>
@@ -69,8 +69,8 @@
                     </select>
                     <label for="impSelCantCuotas">Cantidad de Cuotas</label>
                 </div>
-                
-                <div class="col-9">
+
+                <div class="col-9 box-recorda">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="impCheckDatos">
                         <label class="form-check-label" for="impCheckDatos">
@@ -79,14 +79,40 @@
                     </div>
                 </div>
                 <div class="col-12">
-                    <button id="btn-simular" type="submit" class="btn btn-primary boton-principal">Simular</button>
+                    <button id="btn-simular" type="submit" class="btn btn-primary boton-principal">Iniciar Simulación</button>
                 </div>
             </form>
-            <section>
-                <div id="resultado-simulacion">
+            <section class="section-1">
+                <div class="resultado-1" id="resultado-simulacion">
                 </div>
             </section>
 
+<section class="section-2">
+                <h3 class="p-h3-1 titulo-3"> Nuestras tasas de referencia</h3>
+                <p class="p-dos parrafo-secundario">Para nuestro simulador, siempre utilizamos las siguientes tasas. Si deseas
+                    agregar o eliminar alguna de las opciones, lo podes realizar. Recordá que siempre necesitamos de una
+                    tasa (como mínimo) para poder trabajar.
+                </p>
+                <div class="form-floating tasas mb-3">
+                    <select class="form-select" id="tasas-select" aria-label="seleccion de tasas">
+                    </select>
+                    <label for="floatingSelect">Nuestras Tasas</label>
+                </div>
+                <button id="btn-eliminar-tasa" type="button" class="btn boton-principal">Eliminar tasa</button>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="nueva-tasa-text" placeholder="nueva-tasa">
+                    <label for="nueva-tasa-text">Nombre tasa</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="nueva-tasa-number" placeholder="porcentaje">
+                    <label for="nueva-tasa-number">Porcentaje (0 a 100)</label>
+                </div>
+                <button id="btn-agregar-tasa" type="button" class="btn boton-principal">Agregar tasa</button>
+    
+                <div id="resultado-tasas">
+                </div>
+</section>
+            
         </main>
         <footer>
             <!--derechos reservados-->

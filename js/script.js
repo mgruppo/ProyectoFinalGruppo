@@ -1,10 +1,9 @@
-/*Para la pre entrega 2, y como idea de proyecto, se trabaja bajo la necesidad de contar con una plataforma
+/*Para la pre entrega 3, y como idea de proyecto, se trabaja bajo la necesidad de contar con una plataforma
 que dependiendo la elección de gasto que la persona desea realizar,
 la plataforma le recomienda posibilidades de pagar con tarjeta, en una cuota o más o elegir invertir en un fondo común de inversión*/
 
-const mensajeSalida = "salir" //para salir de la ejecucion
 const planes = []; //array de planes para que en proxima version pueda tener varios planes
-const inflacion = 0.95; //anual
+const inflacion = 0.95; //anual, en version final, puede ser un atributo nuevo en pantalla
 
 //agrego el arrays días para comparar, los días sabado y domingo no se permite realizar inversiones, por eso tienen en inversion false
 const dias = [{
@@ -89,6 +88,17 @@ function mayorQue(n) {
 //si con la ganancia de los intereses le gano a la inflacion
 let mayorQueInflacion = mayorQue(inflacion)
 
+//llenado de tasas
+let llenarCombo = (elementoID, arrayReferencia) => {
+    let select = document.getElementById(elementoID);
+    for (let index = 0; index < arrayReferencia.length; index++) {
+        let option = document.createElement("option");
+        option.value =  arrayReferencia[index].valor;
+        option.innerText =  arrayReferencia[index].descripcion;
+       select.appendChild(option);
+    }
+}
+
 let calcular = () => {
     /*la idea es que: no importa las cuotas que seleccione el usuario
     pero en base a las opciones, mostrarle al usuario las ventajas de invertir el dinero en un plazo fijo
@@ -121,12 +131,12 @@ let calcular = () => {
                         totalMenor = (valorCuota[index] + planCalculo.monto - valorInversion)
                         mejorTasaValor = tasa.valor;
                         mejorTasaDescripcion = tasa.descripcion;
-                        mensaje = "La mejor alternativa es la opción de abonar con " + tasasTarjetas[index].descripcion + " y realizando la inversion de: " + tasa.descripcion + ", si restamos las ganancias el total pagado es de " + totalMenor
+                        mensaje = `La mejor alternativa es la opción de abonar con <span>` + tasasTarjetas[index].descripcion + `</span> y realizando la inversion de: <span>` + tasa.descripcion + `</span>, si restamos las ganancias el total pagado es de <span>` + totalMenor + `</span> y realizando la inversion de: <span>` + tasa.descripcion + `</span>`
                     } else if ((valorCuota[index] + planCalculo.monto - valorInversion) < totalMenor) {
                         totalMenor = (valorCuota[index] + planCalculo.monto - valorInversion)
                         mejorTasaValor = tasa.valor;
                         mejorTasaDescripcion = tasa.descripcion;
-                        mensaje = "La mejor alternativa es la opción de abonar con " + tasasTarjetas[index].descripcion + " y realizando la inversion de: " + tasa.descripcion + ", si restamos las ganancias el total pagado es de " + totalMenor
+                        mensaje = `La mejor alternativa es la opción de abonar con <span>` + tasasTarjetas[index].descripcion + `</span> y realizando la inversion de: <span>` + tasa.descripcion + `</span>, si restamos las ganancias el total pagado es de <span>` + totalMenor + `</span> y realizando la inversion de: <span>` + tasa.descripcion + `</span>`
                     }
                 }
             }
@@ -134,28 +144,29 @@ let calcular = () => {
     }
     let valorCondicion = mayorQueInflacion(mejorTasaValor)
     if (valorCondicion == true) {
-        mensaje += "\nCon esta inversión además, le estás ganando a la inflación proyectada del año que es del " + (inflacion * 100) + "%. Excelente noticia!!"
+        mensaje += `\nCon esta inversión además, <span>le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>. <span>Excelente noticia!!</span>`;
     } else {
-        mensaje += "\nCon esta inversión, No le estás ganando a la inflación proyectada del año que es del " + (inflacion * 100) + "%, pero te das un gusto :D"
+        mensaje += `\nCon esta inversión, <span>No le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>, <span>pero te das un gusto :D</span>`;
     }
     informe(mensaje);
 }
 
 let informe = (mensajeFinal) => {
-    alert(mensajeFinal)
     //Date para buscar el día de hoy
+    let mensajeDia = "";
     const hoy = new Date();
     const hoyDia = hoy.getDay(hoy); //1 es lunes y 7 domingo
     let diaAptoInversion = dias.find((dia) => dia.valor === hoyDia);
     if (diaAptoInversion.inversion == true) {
-        alert("Recorda que hoy es " + diaAptoInversion.descripcion + " y es un día hábil para invertir tu dinero")
+        mensajeDia =`Recorda que hoy es <span>` + diaAptoInversion.descripcion + `</span> y es un <span> día hábil </span> para invertir tu dinero`;
     } else {
-        alert("Recorda que hoy es " + diaAptoInversion.descripcion + " y No podes invertir tu dinero, agenda la inversión para el próximo día hábil")
+        mensajeDia =`Recorda que hoy es <span>` + diaAptoInversion.descripcion + `</span> y <span> No podes invertir tu dinero </span>, agenda la inversión para el próximo día hábil`;
     }
     if (mensajeFinal.trim() != "") {
         let classEvento = "parrafo-secundario";
         datosResultados = document.getElementById("resultado-simulacion");
-        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeFinal;
+        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeFinal+ `<div class=${classEvento}>` + mensajeDia;
+
     }
 }
 
@@ -213,7 +224,6 @@ class Usuario {
     }
 }
 
-
 //for para mostrar los valores por defecto de las tasas
 let tasaMensaje = (tasaReferencia) => {
     let mensajeAuxiliar = ""
@@ -227,73 +237,75 @@ let tasaMensaje = (tasaReferencia) => {
     return mensajeAuxiliar
 }
 
-let nuevaTasa = (tasaReferencia) => {
-    do {
-        nuevaTasaPorcentaje = Number(prompt(`Por favor, en el rango de 0 (cero) a 100(cien), ingrese el valor de la tasa de refencia, correspondiente a la Tasa Nominal Anual (TNA)`));
-    } while (!((nuevaTasaPorcentaje / 100) >= 0 && (nuevaTasaPorcentaje / 100) <= 1));
-    do {
-        nuevaTasaDescripcion = prompt(`Por favor, ingrese el nombre que identifica a la tasa de refencia`);
-    } while (nuevaTasaDescripcion.trim() == "");
-    tasaReferencia.push({
-        descripcion: nuevaTasaDescripcion,
-        valor: (nuevaTasaPorcentaje / 100)
-    })
+let limpiarCombo = () => {
+    let options = document.querySelectorAll('#tasas-select option');
+    options.forEach(o => o.remove());
 }
 
-let eliminarTasa = (tasaReferencia) => {
-    let mensajeEleccion = tasaMensaje(tasaReferencia)
-    let contadorBorrado = 0
-    do {
-        tasaEliminar = prompt(`Por favor, de las siguientes tasas:\n ${mensajeEleccion} \nIngrese el nombre de la tasa a eliminar, \nDe lo contrario, escriba ${mensajeSalida} para abandonar el borrado y continuar`);
-    } while (tasaEliminar.trim() == "");
+let nuevaTasa = (nuevaTasaPorcentaje, nuevaTasaDescripcion, tasaReferencia) => {
+    let mensajeError = "";
+    let mensajeCorrecto = "";
+    if (!((nuevaTasaPorcentaje / 100) >= 0 && (nuevaTasaPorcentaje / 100) <= 1)) {
+        mensajeError = `Por favor, en el rango de 0 (cero) a 100(cien), ingrese el valor de la tasa de refencia, correspondiente a la Tasa Nominal Anual (TNA)`   
+    } else {          
+        if ((nuevaTasaDescripcion.trim != "") && (nuevaTasaPorcentaje>0 && nuevaTasaPorcentaje<=100)) {
+            tasaReferencia.push({
+                descripcion: nuevaTasaDescripcion,
+                valor: (nuevaTasaPorcentaje / 100)
+            })
+            mensajeCorrecto = "Perfecto, la tasa se creo correctamente";
+            document.getElementById("nueva-tasa-number").value = 0;
+            document.getElementById("nueva-tasa-text").value = "";
+            limpiarCombo();
+            llenarCombo("tasas-select",tasasInversion);   
+        } else {
+            mensajeError = `Por favor, verifique los valores ingresados`;
+        }
+    }
+    if (mensajeError.trim() != "") {
+        let classEvento = "parrafo-secundario-error";
+        datosResultados = document.getElementById("resultado-tasas");
+        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeError;
+    } else if (mensajeCorrecto.trim() != "") {
+        let classEvento = "parrafo-secundario";
+        datosResultados = document.getElementById("resultado-tasas");
+        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeCorrecto;
+    }
+}
 
-    if (tasaEliminar.toLowerCase() != mensajeSalida) {
-        index = tasaReferencia.findIndex(i => i.descripcion === tasaEliminar)
+let eliminarTasa = (tasaReferencia, textoEliminar) => {
+    let mensajeError = "";
+    let mensajeCorrecto = "";
+    let contadorBorrado = 0;
+    //necesito una tasa para poder simular
+    if (tasaReferencia.length<=1) {
+        mensajeError = `No se puede eliminar la tasa, se necesita una tasa para la simulación`;
+    } else {
+        index = tasaReferencia.findIndex(i => i.descripcion === textoEliminar)
         //si existe, o sea, es distinto a -1, lo borro con splice
         if (index != -1) {
             tasaReferencia.splice(index, 1)
             contadorBorrado++
         }
-    }
-
-    if (contadorBorrado > 0) {
-        alert("Perfecto, la tasa se borro correctamente")
-    } else {
-        alert("No se encontró la tasa a borrar")
-    }
-    return tasaReferencia
-}
-
-let controlTasaInversion = (tasasInversion) => {
-    let mensajeEleccion = tasaMensaje(tasasInversion)
-    let control = false;
-    do {
-        eleccionTasa = Number(prompt(`Para la siguiente simulación, vamos a trabajar con los siguientes valores de inversión\n${mensajeEleccion}\nEscriba\n1 - Para continuar\n2 - Para agregar una nueva tasa al listado\n3 - Para eliminiar una tasa del listado anterior`));
-        switch (eleccionTasa) {
-            case 1:
-                //continuo con las dos tasas ingresadas por defecto
-                control = true;
-                break;
-            case 2:
-                //agrego una nueva tasa
-                control = true;
-                nuevaTasa(tasasInversion);
-                break;
-            case 3:
-                //elimino una de las tasas - si o si, debe existir una tasa, para la simulacion
-                control = true;
-                tasasInversion = eliminarTasa(tasasInversion);
-                break;
-            default:
-                //opcion incorrecta, debe ingresar un valor correcto
-                break;
+        if (contadorBorrado > 0) {
+            mensajeCorrecto = "Perfecto, la tasa se borro correctamente";
+            limpiarCombo();
+            llenarCombo("tasas-select",tasasInversion); 
+        } else {
+            mensajeError = "No se encontró la tasa a borrar";
         }
-    } while ((control == false));
-    mensajeEleccion = tasaMensaje(tasasInversion)
-    alert(`Continuamos con las siguientes tasas:\n ${mensajeEleccion}`)
-}
+        }
 
-//alert("Bienvenido a la plataforma de decisión financiera");
+    if (mensajeError.trim() != "") {
+        let classEvento = "parrafo-secundario-error";
+        datosResultados = document.getElementById("resultado-tasas");
+        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeError;
+    } else if (mensajeCorrecto.trim() != "") {
+        let classEvento = "parrafo-secundario";
+        datosResultados = document.getElementById("resultado-tasas");
+        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeCorrecto;
+    }
+}
 
 //busco en localStorage el objeto y hago un parse para que Javascript me devuelva un objeto
 //eso es porque si guardo el nombre, brindo una mejor experiencia al inicio nuevamente
@@ -306,6 +318,10 @@ if (usurioLocalStorage) { //Si Nombre tiene contenido, entonces lo muestro
     let usuario = new Usuario('')
     asignarValoresInputs(usuario)
 }
+
+//para completar el combobox de tasas de intereses
+llenarCombo("tasas-select",tasasInversion);
+
 
 function asignarValoresInputs(usuario) {
     if (usuario.nombre != '') {
@@ -323,35 +339,44 @@ function grabarStorage() {
     }))    
 }
 
+function borrarStorage() {
+    localStorage.removeItem("usuario")    
+}
 
-//validacion de nombre de la persona con do while
+//desgrabado de los datos, si destilda el recordar
+function almacenamientoDatos() {
+    if (document.getElementById("impCheckDatos").checked) {
+        grabarStorage(); 
+    } else {
+        borrarStorage();
+    }
+}
 
-/*
-Inicio Agregado control por form
-*/
+document.getElementById("impCheckDatos").addEventListener('change', almacenamientoDatos)
+
+let botonEliminarTasa = document.getElementById("btn-eliminar-tasa");
+botonEliminarTasa.addEventListener("click", () => {
+    //recupero valor del combo    
+    let combo = document.getElementById("tasas-select");  
+    let valorEliminar = combo.value; //El valor seleccionado
+    let textoEliminar = combo.options[combo.selectedIndex].innerText; //El texto de la opción seleccionada
+    eliminarTasa(tasasInversion, textoEliminar);
+})
+
+let botonAgregarTasa = document.getElementById("btn-agregar-tasa");
+botonAgregarTasa.addEventListener("click", () => {
+    let tasaNum = Number(document.getElementById("nueva-tasa-number").value);
+    let tasaText = document.getElementById("nueva-tasa-text").value;
+    nuevaTasa(tasaNum, tasaText, tasasInversion);
+})
 
 let simulaForm = document.getElementById("form-simulacion");
 simulaForm.addEventListener("submit", validarFormulario);
 
 function validarFormulario(e) {
-
     e.preventDefault();
-    // let nomPersona = document.getElementById("impNomPersona");
-    // let SelDeseo = document.getElementById("impSelDeseo");
-    // let nomPlan = document.getElementById("impNomPlan");
-    // let precioPlan = document.getElementById("impPrecioPlan");
-    // let cantCuotas = document.getElementById("impSelCantCuotas");
-    // let checkDatos = document.getElementById("impCheckDatos");
-
-    // //Obtenemos el elemento desde el cual se disparó el evento
-    // let formulario = e.target
-    // //Obtengo el valor del primero hijo <input type="text">
-    // console.log(formulario.children[0].value);
-    // //Obtengo el valor del segundo hijo <input type="number"> 
-    // console.log(formulario.children[1].value);
-
     datos(e);
-
+    //grabado de los datos, si pone recordar
     let checkDatos = document.getElementById("impCheckDatos".value)
     if (document.getElementById("impCheckDatos").checked) {
          grabarStorage() 
@@ -365,7 +390,7 @@ function datos(e) {
     datosResultados.innerHTML = '';
 
     nombre = e.srcElement[0].value;
-    if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
+    if (nombre.trim() != "") {
         //casteo el numero de la eleccion, se debe elegir una de las opciones para continuar
         eleccion = Number(e.srcElement[1].value);
         switch (eleccion) {
@@ -414,16 +439,13 @@ function datos(e) {
                             mensajeError = "Cantidad de cuotas incorrecta, por favor seleciona entre las opciones correctas";
                             break;
                     }
-
                     if (cantidadCuotas >= 1 && cantidadCuotas <= 3) {
-                        alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
+                        //"Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas
                         //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
                         planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
-                        //Para controlar si el usuario desea agregar una nueva tasa o eliminar otra
-                        controlTasaInversion(tasasInversion);
+                        //procedo a calcular
                         calcular();
                     }
-
                 } else {
                     let esMayor = (montoGasto > 2000000)
                     if (esMayor) {
@@ -435,124 +457,17 @@ function datos(e) {
                     }
                 }
             }
-
         } else {
             mensajeError = "Por favor, selecciona el deseo financiero, para que te podamos ayudarte";
         }
-
     } else if (nombre.trim() == "") {
         mensajeError = "Por favor, ingresa un nombre válido para continuar";
     } else {
         mensajeError = "Seleccionaste una opción incorrecta, por lo que no podemos ayudarte";
     }
-
-
-
     if (mensajeError.trim() != "") {
         let classEvento = "parrafo-secundario-error";
         datosResultados = document.getElementById("resultado-simulacion");
         datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeError;
     }
-
-
-
 }
-
-
-
-/*
-Fin Agregado control por form
-*/
-
-// do {
-//     nombre = prompt(`Por favor, ingresa tu nombre para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
-//     if (nombre.trim() == "") {
-//         alert(`Por favor, ingresa un nombre válido para continuar \nEscriba ${mensajeSalida} para abandonar el programa`);
-//     } else if (nombre.toLowerCase() == mensajeSalida) {
-//         break
-//     }
-// } while (nombre.trim() == "");
-// if ((nombre.trim() != "") && (nombre.toLowerCase() != mensajeSalida)) {
-//     //casteo el numero de la eleccion, por defecto es el valor 0 (sin eleccion) y se asigna nombre otros, de lo contrario se establece entre las opciones
-//     eleccion = Number(prompt("Contanos " + nombre + ", ¿cuál es tu deseo financiero? Ingresa el número de la opción para continuar \nIngresa 1 para Viaje, \nIngresa 2 para Electronica, \nIngresa 3 para Ropa, \nIngresa 4 para Otro"));
-//     switch (eleccion) {
-//         case 1:
-//             eleccionLetras = "Viaje";
-//             break;
-//         case 2:
-//             eleccionLetras = "Electronica";
-//             break;
-//         case 3:
-//             eleccionLetras = "Ropa";
-//             break;
-//         case 4:
-//             eleccionLetras = "Otro";
-//             break;
-//         default:
-//             //por el momento dejo la opcion por defecto, puede ser una categoria otros e ingresar algun nombre o cambiar la logica para elegir entre el combo anterior
-//             eleccionLetras = "Otra opción";
-//             break;
-//     }
-//     if (eleccion >= 1 && eleccion <= 4) {
-//         //definir un nombre del plan para hacerlo mas personalizado
-//         nombrePlan = prompt(`Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
-//         while (nombrePlan.trim() == "") {
-//             nombrePlan = prompt(`Necesitamos un poco más de información ¿Cómo llamarías a tu plan de la categoría: ${eleccionLetras}?`);
-//         }
-//         //validacion de monto con do while, por defecto el programa funcionara si el valor es entre 1000 y 2 millones, de lo contrario no continua
-//         //se establece el supuesto que mayor a 2 millones debe contratar un plan personalizado que no se plantea es esta etapa
-//         do {
-//             montoGasto = Number(prompt("¿Cuál es el monto total del gasto que deseas para " + nombrePlan + "? \nRecorda que solamente podemos ayudarte, si ingresas valores entre 1000 (mil) y 2 millones"));
-//             if (typeof (montoGasto) != "number") {
-//                 alert("Ingrese un valor de tipo numerico")
-//             } else if (montoGasto >= 1000 && montoGasto <= 2000000) {
-//                 //puedo trabajar en el asesoramiento
-//                 do {
-//                     cantidadCuotas = Number(prompt("Contanos, ¿en cuantas cuotas pensas financiarlo? Ingresa el número de la opción para continuar \nIngresa 1 para 1 cuota sin interes, \nIngresa 2 para 6 cuotas" + "\nIngresa 3 para 12 cuotas"));
-//                     switch (cantidadCuotas) {
-//                         case 1:
-//                             eleccionCuotas = "1 Cuota";
-//                             cantidadCorrecta = true;
-//                             break;
-//                         case 2:
-//                             eleccionCuotas = "6 Cuotas";
-//                             cantidadCorrecta = true;
-//                             break;
-//                         case 3:
-//                             eleccionCuotas = "12 Cuotas";
-//                             cantidadCorrecta = true;
-//                             break;
-//                         default:
-//                             eleccionCuotas = "Cantidad incorrecta, por favor vuelva a selecionar entre las opciones correctas";
-//                             cantidadCorrecta = false;
-//                             break;
-//                     }
-//                 }
-//                 while (cantidadCorrecta == false);
-//                 alert("Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas);
-//                 //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
-//                 planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
-//                 //Para controlar si el usuario desea agregar una nueva tasa o eliminar otra
-//                 controlTasaInversion(tasasInversion);
-//                 calcular();
-//             } else {
-//                 let esMayor = (montoGasto > 2000000)
-//                 if (esMayor) {
-//                     alert("Lamentamos no poder ayudarte, estamos trabajando para lograr asesorarte en montos grandes de dinero, superiores a 2 millones");
-//                 } else {
-//                     alert("Lamentamos no poder ayudarte, el monto es menor a $1000 \nRecorda que podemos ayudarte en valores mayores o iguales a 1000 y menor o igual a 2 millones");
-//                 }
-//             }
-//         }
-//         while (montoGasto == 0);
-//     } else {
-//         alert("Seleccionaste una opción incorrecta, por lo que no podemos ayudarte");
-//     }
-// }
-
-
-// let botonSimular = document.getElementById("btn-simular");
-
-// botonSimular.addEventListener("click", () => {
-//     alert("Es una prueba");
-// })
