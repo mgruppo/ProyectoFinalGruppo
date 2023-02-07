@@ -93,9 +93,9 @@ let llenarCombo = (elementoID, arrayReferencia) => {
     let select = document.getElementById(elementoID);
     for (let index = 0; index < arrayReferencia.length; index++) {
         let option = document.createElement("option");
-        option.value =  arrayReferencia[index].valor;
-        option.innerText =  arrayReferencia[index].descripcion;
-       select.appendChild(option);
+        option.value = arrayReferencia[index].valor;
+        option.innerText = arrayReferencia[index].descripcion;
+        select.appendChild(option);
     }
 }
 
@@ -158,14 +158,14 @@ let informe = (mensajeFinal) => {
     const hoyDia = hoy.getDay(hoy); //1 es lunes y 7 domingo
     let diaAptoInversion = dias.find((dia) => dia.valor === hoyDia);
     if (diaAptoInversion.inversion == true) {
-        mensajeDia =`Recorda que hoy es <span>` + diaAptoInversion.descripcion + `</span> y es un <span> día hábil </span> para invertir tu dinero`;
+        mensajeDia = `Recorda que hoy es <span>` + diaAptoInversion.descripcion + `</span> y es un <span> día hábil </span> para invertir tu dinero`;
     } else {
-        mensajeDia =`Recorda que hoy es <span>` + diaAptoInversion.descripcion + `</span> y <span> No podes invertir tu dinero </span>, agenda la inversión para el próximo día hábil`;
+        mensajeDia = `Recorda que hoy es <span>` + diaAptoInversion.descripcion + `</span> y <span> No podes invertir tu dinero </span>, agenda la inversión para el próximo día hábil`;
     }
     if (mensajeFinal.trim() != "") {
         let classEvento = "parrafo-secundario";
         datosResultados = document.getElementById("resultado-simulacion");
-        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeFinal+ `<div class=${classEvento}>` + mensajeDia;
+        datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeFinal + `<div class=${classEvento}>` + mensajeDia;
 
     }
 }
@@ -246,9 +246,9 @@ let nuevaTasa = (nuevaTasaPorcentaje, nuevaTasaDescripcion, tasaReferencia) => {
     let mensajeError = "";
     let mensajeCorrecto = "";
     if (!((nuevaTasaPorcentaje / 100) >= 0 && (nuevaTasaPorcentaje / 100) <= 1)) {
-        mensajeError = `Por favor, en el rango de 0 (cero) a 100(cien), ingrese el valor de la tasa de refencia, correspondiente a la Tasa Nominal Anual (TNA)`   
-    } else {          
-        if ((nuevaTasaDescripcion.trim != "") && (nuevaTasaPorcentaje>0 && nuevaTasaPorcentaje<=100)) {
+        mensajeError = `Por favor, en el rango de 0 (cero) a 100(cien), ingrese el valor de la tasa de refencia, correspondiente a la Tasa Nominal Anual (TNA)`
+    } else {
+        if ((nuevaTasaDescripcion.trim != "") && (nuevaTasaPorcentaje > 0 && nuevaTasaPorcentaje <= 100)) {
             tasaReferencia.push({
                 descripcion: nuevaTasaDescripcion,
                 valor: (nuevaTasaPorcentaje / 100)
@@ -257,7 +257,7 @@ let nuevaTasa = (nuevaTasaPorcentaje, nuevaTasaDescripcion, tasaReferencia) => {
             document.getElementById("nueva-tasa-number").value = 0;
             document.getElementById("nueva-tasa-text").value = "";
             limpiarCombo();
-            llenarCombo("tasas-select",tasasInversion);   
+            llenarCombo("tasas-select", tasasInversion);
         } else {
             mensajeError = `Por favor, verifique los valores ingresados`;
         }
@@ -278,7 +278,7 @@ let eliminarTasa = (tasaReferencia, textoEliminar) => {
     let mensajeCorrecto = "";
     let contadorBorrado = 0;
     //necesito una tasa para poder simular
-    if (tasaReferencia.length<=1) {
+    if (tasaReferencia.length <= 1) {
         mensajeError = `No se puede eliminar la tasa, se necesita una tasa para la simulación`;
     } else {
         index = tasaReferencia.findIndex(i => i.descripcion === textoEliminar)
@@ -290,11 +290,11 @@ let eliminarTasa = (tasaReferencia, textoEliminar) => {
         if (contadorBorrado > 0) {
             mensajeCorrecto = "Perfecto, la tasa se borro correctamente";
             limpiarCombo();
-            llenarCombo("tasas-select",tasasInversion); 
+            llenarCombo("tasas-select", tasasInversion);
         } else {
             mensajeError = "No se encontró la tasa a borrar";
         }
-        }
+    }
 
     if (mensajeError.trim() != "") {
         let classEvento = "parrafo-secundario-error";
@@ -320,7 +320,7 @@ if (usurioLocalStorage) { //Si Nombre tiene contenido, entonces lo muestro
 }
 
 //para completar el combobox de tasas de intereses
-llenarCombo("tasas-select",tasasInversion);
+llenarCombo("tasas-select", tasasInversion);
 
 
 function asignarValoresInputs(usuario) {
@@ -328,6 +328,7 @@ function asignarValoresInputs(usuario) {
         document.getElementById("bienvenida").innerHTML = `Bienvenido ${usuario.nombre}, nos alegra volverte a ver, para ayudarte a elegir la mejor manera de financiar tus gastos`
         document.getElementById("impNomPersona").value = usuario.nombre
         document.getElementById("impCheckDatos").checked = true;
+        tasasInversion = JSON.parse(localStorage.getItem("tasasInversion"));
     }
 }
 
@@ -336,17 +337,20 @@ function grabarStorage() {
     let checkDatos = document.getElementById("impCheckDatos").checked;
     localStorage.setItem("usuario", JSON.stringify({
         nombre: nomPersona
-    }))    
+    }))
+    //grabo ademas las tasas que utiliza, para mantener las opciones que trabaja
+    localStorage.setItem("tasasInversion", JSON.stringify(tasasInversion));
 }
 
 function borrarStorage() {
-    localStorage.removeItem("usuario")    
+    localStorage.removeItem("usuario");
+    localStorage.removeItem("tasasInversion");
 }
 
 //desgrabado de los datos, si destilda el recordar
 function almacenamientoDatos() {
     if (document.getElementById("impCheckDatos").checked) {
-        grabarStorage(); 
+        grabarStorage();
     } else {
         borrarStorage();
     }
@@ -357,7 +361,7 @@ document.getElementById("impCheckDatos").addEventListener('change', almacenamien
 let botonEliminarTasa = document.getElementById("btn-eliminar-tasa");
 botonEliminarTasa.addEventListener("click", () => {
     //recupero valor del combo    
-    let combo = document.getElementById("tasas-select");  
+    let combo = document.getElementById("tasas-select");
     let valorEliminar = combo.value; //El valor seleccionado
     let textoEliminar = combo.options[combo.selectedIndex].innerText; //El texto de la opción seleccionada
     eliminarTasa(tasasInversion, textoEliminar);
@@ -379,8 +383,8 @@ function validarFormulario(e) {
     //grabado de los datos, si pone recordar
     let checkDatos = document.getElementById("impCheckDatos".value)
     if (document.getElementById("impCheckDatos").checked) {
-         grabarStorage() 
-     }
+        grabarStorage()
+    }
 }
 
 function datos(e) {
