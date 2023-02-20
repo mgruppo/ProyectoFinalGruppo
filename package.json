@@ -1,7 +1,7 @@
 {
-  "name": "preentrega3gruppo",
-  "version": "1.2.0",
-  "description": "preentrega numero 3 del curso de javascript",
+  "name": "proyectofinalgruppo",
+  "version": "1.10.0",
+  "description": "proyecto final del curso de javascript",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mgruppo/PreEntrega3Gruppo.git"
+    "url": "https://github.com/mgruppo/ProyectoFinalGruppo.git"
   },
   "author": "mariano gruppo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mgruppo/PreEntrega3Gruppo/issues"
+    "url": "https://github.com/mgruppo/ProyectoFinalGruppo/issues"
   },
-  "homepage": "https://github.com/mgruppo/PreEntrega3Gruppo#readme",
+  "homepage": "https://github.com/mgruppo/ProyectoFinalGruppo#readme",
   "devDependencies": {
     "node-sass": "^8.0.0",
     "nodemon": "^2.0.20"

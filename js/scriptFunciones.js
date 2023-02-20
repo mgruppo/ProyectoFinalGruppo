@@ -71,12 +71,16 @@ let calcular = () => {
         }
     }
     let valorCondicion = mayorQueInflacion(mejorTasaValor)
-    if (valorCondicion == true) {
-        mensaje += `\nCon esta inversión además, <span>le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>. <span>Excelente noticia!!</span>`;
-    } else {
-        mensaje += `\nCon esta inversión, <span>No le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>, <span>pero te das un gusto :D</span>`;
-    }
+    // if (valorCondicion == true) {
+    //     mensaje += `\nCon esta inversión además, <span>le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>. <span>Excelente noticia!!</span>`;
+    // } else {
+    //     mensaje += `\nCon esta inversión, <span>No le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>, <span>pero te das un gusto :D</span>`;
+    // }
+    //Operador ternario
+    valorCondicion == true ? mensaje += `\nCon esta inversión además, <span>le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>. <span>Excelente noticia!!</span>` : mensaje += `\nCon esta inversión, <span>No le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>, <span>pero te das un gusto :D</span>`
+
     informe(mensaje);
+    mensajeAlerta("Simulación correcta",true); 
 }
 
 let informe = (mensajeFinal) => {
@@ -140,10 +144,12 @@ let nuevaTasa = (nuevaTasaPorcentaje, nuevaTasaDescripcion, tasaReferencia) => {
         let classEvento = "parrafo-secundario-error";
         datosResultados = document.getElementById("resultado-tasas");
         datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeError;
+        mensajeAlerta("Controle los errores",false);  
     } else if (mensajeCorrecto.trim() != "") {
         let classEvento = "parrafo-secundario";
         datosResultados = document.getElementById("resultado-tasas");
         datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeCorrecto;
+        mensajeAlerta("Tasa creada",true);  
     }
 }
 
@@ -174,13 +180,30 @@ let eliminarTasa = (tasaReferencia, textoEliminar) => {
         let classEvento = "parrafo-secundario-error";
         datosResultados = document.getElementById("resultado-tasas");
         datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeError;
+        mensajeAlerta("Error al eliminar la tasa",false);           
     } else if (mensajeCorrecto.trim() != "") {
         let classEvento = "parrafo-secundario";
         datosResultados = document.getElementById("resultado-tasas");
         datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeCorrecto;
+        mensajeAlerta("Tasa eliminada",true);    
     }
 }
 
+//funcion para mostrar mensajes, si quieren cambiar la forma, se puede cambiar para todos
+let mensajeAlerta = (textoMensaje,estado) => {
+    let colorFondo = "linear-gradient(to right, #eb0000, #e50026, #dc003b, #ce004c, #be005a)";
+    estado == true && (colorFondo = "linear-gradient(to right top, #06c698, #00c49e, #00c2a4, #00c0a9, #00bead)");
+    Toastify({
+        text: textoMensaje,
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+        stopOnFocus: true,
+        style: {
+          background: colorFondo
+        }
+        }).showToast();
+}
 
 function asignarValoresInputs(usuario) {
     if (usuario.nombre != '') {
@@ -311,5 +334,6 @@ function datos(e) {
         let classEvento = "parrafo-secundario-error";
         datosResultados = document.getElementById("resultado-simulacion");
         datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeError;
+        mensajeAlerta("El simulador, necesita más datos",false); 
     }
 }
