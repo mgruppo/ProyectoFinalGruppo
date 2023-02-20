@@ -1,6 +1,7 @@
 //Archivo de variables y arrays
 const planes = []; //array de planes para que en proxima version pueda tener varios planes
 const inflacion = 0.95; //anual, en version final, puede ser un atributo nuevo en pantalla
+const student = 'marianogruppo'
 
 //agrego el arrays días para comparar, los días sabado y domingo no se permite realizar inversiones, por eso tienen en inversion false
 const dias = [{

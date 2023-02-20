@@ -81,7 +81,7 @@ botonEliminarTasa.addEventListener("click", () => {
     let textoEliminar = combo.options[combo.selectedIndex].innerText; //El texto de la opción seleccionada
     //utilizo sweetalert2 como mensaje para validar
     Swal.fire({
-        title: 'Está seguro de borrar la tasa de nombre '+ textoEliminar +'?',
+        title: 'Está seguro de borrar la tasa de nombre ' + textoEliminar + '?',
         text: "Una vez eliminada, no se puede recuperar la acción",
         icon: 'warning',
         showCancelButton: true,
@@ -89,11 +89,11 @@ botonEliminarTasa.addEventListener("click", () => {
         confirmButtonColor: '#7c95b8',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, borrar!'
-      }).then((result) => {
+    }).then((result) => {
         if (result.isConfirmed) {
-          eliminarTasa(tasasInversion, textoEliminar);
+            eliminarTasa(tasasInversion, textoEliminar);
         }
-      }) 
+    })
 })
 
 let botonAgregarTasa = document.getElementById("btn-agregar-tasa");
@@ -110,11 +110,11 @@ botonAgregarTasa.addEventListener("click", () => {
         confirmButtonColor: '#7c95b8',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí, agregar!'
-      }).then((result) => {
+    }).then((result) => {
         if (result.isConfirmed) {
             nuevaTasa(tasaNum, tasaText, tasasInversion);
         }
-      })
+    })
 })
 
 let simulaForm = document.getElementById("form-simulacion");
