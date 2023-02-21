@@ -205,6 +205,16 @@ let mensajeAlerta = (textoMensaje, estado) => {
     }).showToast();
 }
 
+function mostrarMensaje(mensaje) {
+    Swal.fire({
+        title: mensaje.titulo,
+        text: mensaje.comentario,
+        icon: mensaje.icono,
+        showCancelButton: false,
+        showConfirmButton: true
+    })
+}
+
 function asignarValoresInputs(usuario) {
     if (usuario.nombre != '') {
         document.getElementById("bienvenida").innerHTML = `Bienvenido ${usuario.nombre}, nos alegra volverte a ver, para ayudarte a elegir la mejor manera de financiar tus gastos`
@@ -222,6 +232,12 @@ function grabarStorage() {
     }))
     //grabo ademas las tasas que utiliza, para mantener las opciones que trabaja
     localStorage.setItem("tasasInversion", JSON.stringify(tasasInversion));
+    
+    //grabo datos en el server
+    let usuario = new Usuario(nomPersona);
+    usuario.setPlanesUsuario(planes);
+    grabarDatosServer(usuario);
+    //console.log(usuario);
 }
 
 function borrarStorage() {

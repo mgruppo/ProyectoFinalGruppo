@@ -9,3 +9,11 @@
     box-shadow: 1px 1px 5px black;
     text-shadow: 1px 1px 5px black;
 }
+
+/*efecto cuando se posicionan sobre botones de la pagina*/
+.boton-principal:hover {
+    box-shadow: 1px 1px 2px black;
+    background-color: $color-boton;
+    color: whitesmoke;
+    @extend %estilo-sobre;
+}

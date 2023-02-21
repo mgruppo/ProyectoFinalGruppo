@@ -43,6 +43,7 @@ class Usuario {
     constructor(nombre) {
         this.nombre = nombre;
         this.activo = true;
+        this.planesUsuario = [];
     }
     setNombre(nuevoNombre) {
         if (nombre != '') {
@@ -54,7 +55,13 @@ class Usuario {
         this.activo = activo;
         return this.activo
     }
+    setPlanesUsuario(planes) {
+        this.planes = planes;
+        return this.planes
+    }
 }
+
+document.getElementById("loader").style.display = "none";
 
 //busco en localStorage el objeto y hago un parse para que Javascript me devuelva un objeto
 //eso es porque si guardo el nombre, brindo una mejor experiencia al inicio nuevamente
