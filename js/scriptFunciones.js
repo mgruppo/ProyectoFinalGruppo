@@ -235,6 +235,7 @@ function grabarStorage() {
     
     //grabo datos en el server
     let usuario = new Usuario(nomPersona);
+    console.log(planes);
     usuario.setPlanesUsuario(planes);
     grabarDatosServer(usuario);
     //console.log(usuario);
@@ -323,7 +324,7 @@ function datos(e) {
                     if (cantidadCuotas >= 1 && cantidadCuotas <= 3) {
                         //"Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas
                         //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
-                        planes.push(new Plan(nombre, eleccion, montoGasto, cantidadCuotas));
+                        planes.push(new Plan(nombre, eleccion, nombrePlan, montoGasto, cantidadCuotas));
                         //procedo a calcular
                         calcular();
                     }

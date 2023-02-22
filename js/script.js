@@ -8,9 +8,10 @@ class Plan {
     //tipo: 1 para Viaje, 2 para Electronica, 3 para Ropa, 4 para Otro
     //monto: importe
     //financiacion: 1 para 1 cuota sin interes, 2 para 6 cuotas con un interes, 3 para 12 cuotas
-    constructor(nombre, tipo, monto, financiacion) {
+    constructor(nombre, tipo, deseo, monto, financiacion) {
         this.nombre = nombre;
         this.tipo = tipo;
+        this.deseo = deseo;
         this.monto = parseFloat(monto);
         this.financiacion = financiacion;
         this.activo = true;
@@ -55,9 +56,13 @@ class Usuario {
         this.activo = activo;
         return this.activo
     }
-    setPlanesUsuario(planes) {
-        this.planes = planes;
-        return this.planes
+    setPlanesUsuario(planesUsuario) {
+        this.planesUsuario = planesUsuario;
+        return this.planesUsuario
+    }
+    setSumoPlan(planesUsuario) {
+        this.planesUsuario.push(planesUsuario);
+        return this.planesUsuario 
     }
 }
 

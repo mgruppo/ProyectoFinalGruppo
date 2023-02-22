@@ -25,4 +25,13 @@
         @extend %estilos-margenes;
     }
 
+    .section-3 {
+        text-align: center;
+        @extend %estilos-margenes;
+        .tabla-simulacion {  
+            border-collapse: collapse;
+            width: 100%;
+        }
+    }
+
 }
