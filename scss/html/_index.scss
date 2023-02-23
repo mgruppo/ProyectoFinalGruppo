@@ -1,7 +1,7 @@
 //estilos del index principal
 .principal {
     @include flex;
-    
+
     .formulario {
         text-align: center;
         @extend %estilos-margenes;
@@ -24,14 +24,4 @@
         text-align: center;
         @extend %estilos-margenes;
     }
-
-    .section-3 {
-        text-align: center;
-        @extend %estilos-margenes;
-        .tabla-simulacion {  
-            border-collapse: collapse;
-            width: 100%;
-        }
-    }
-
 }

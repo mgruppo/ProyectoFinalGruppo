@@ -8,7 +8,6 @@ let interes = (importe, interes, cantidadMeses) => {
     return valorResultado
 }
 
-//funciones de orden superior
 //para calcular si la ganancia es mayor que la inflacion
 function mayorQue(n) {
     return (m) => m > n
@@ -16,7 +15,6 @@ function mayorQue(n) {
 //si con la ganancia de los intereses le gano a la inflacion
 let mayorQueInflacion = mayorQue(inflacion)
 
-//llenado de tasas
 let llenarCombo = (elementoID, arrayReferencia) => {
     let select = document.getElementById(elementoID);
     for (let index = 0; index < arrayReferencia.length; index++) {
@@ -71,23 +69,15 @@ let calcular = () => {
         }
     }
     let valorCondicion = mayorQueInflacion(mejorTasaValor)
-    // if (valorCondicion == true) {
-    //     mensaje += `\nCon esta inversión además, <span>le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>. <span>Excelente noticia!!</span>`;
-    // } else {
-    //     mensaje += `\nCon esta inversión, <span>No le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>, <span>pero te das un gusto :D</span>`;
-    // }
-    //Operador ternario
     valorCondicion == true ? mensaje += `\nCon esta inversión además, <span>le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>. <span>Excelente noticia!!</span>` : mensaje += `\nCon esta inversión, <span>No le estás ganando a la inflación</span> proyectada del año que es del <span>` + (inflacion * 100) + `%</span>, <span>pero te das un gusto :D</span>`
 
     informe(mensaje);
-    mensajeAlerta("Simulación correcta", true);
 }
 
 let informe = (mensajeFinal) => {
-    //Date para buscar el día de hoy
     let mensajeDia = "";
     const hoy = new Date();
-    const hoyDia = hoy.getDay(hoy); //1 es lunes y 7 domingo
+    const hoyDia = hoy.getDay(hoy);
     let diaAptoInversion = dias.find((dia) => dia.valor === hoyDia);
     if (diaAptoInversion.inversion == true) {
         mensajeDia = `Recorda que hoy es <span>` + diaAptoInversion.descripcion + `</span> y es un <span> día hábil </span> para invertir tu dinero`;
@@ -102,7 +92,6 @@ let informe = (mensajeFinal) => {
     }
 }
 
-//for para mostrar los valores por defecto de las tasas
 let tasaMensaje = (tasaReferencia) => {
     let mensajeAuxiliar = ""
     for (let index = 0; index < tasaReferencia.length; index++) {
@@ -157,12 +146,10 @@ let eliminarTasa = (tasaReferencia, textoEliminar) => {
     let mensajeError = "";
     let mensajeCorrecto = "";
     let contadorBorrado = 0;
-    //necesito una tasa para poder simular
     if (tasaReferencia.length <= 1) {
         mensajeError = `No se puede eliminar la tasa, se necesita una tasa para la simulación`;
     } else {
         index = tasaReferencia.findIndex(i => i.descripcion === textoEliminar)
-        //si existe, o sea, es distinto a -1, lo borro con splice
         if (index != -1) {
             tasaReferencia.splice(index, 1)
             contadorBorrado++
@@ -189,7 +176,6 @@ let eliminarTasa = (tasaReferencia, textoEliminar) => {
     }
 }
 
-//funcion para mostrar mensajes, si quieren cambiar la forma, se puede cambiar para todos
 let mensajeAlerta = (textoMensaje, estado) => {
     let colorFondo = "linear-gradient(to right, #eb0000, #e50026, #dc003b, #ce004c, #be005a)";
     estado == true && (colorFondo = "linear-gradient(to right top, #06c698, #00c49e, #00c2a4, #00c0a9, #00bead)");
@@ -226,24 +212,25 @@ function asignarValoresInputs(usuario) {
 
 function grabarStorage() {
     let nomPersona = document.getElementById("impNomPersona").value
-    let checkDatos = document.getElementById("impCheckDatos").checked;
     localStorage.setItem("usuario", JSON.stringify({
         nombre: nomPersona
     }))
     //grabo ademas las tasas que utiliza, para mantener las opciones que trabaja
     localStorage.setItem("tasasInversion", JSON.stringify(tasasInversion));
-    
+}
+
+let grabarServer = () => {
     //grabo datos en el server
+    let nomPersona = document.getElementById("impNomPersona").value
     let usuario = new Usuario(nomPersona);
-    console.log(planes);
     usuario.setPlanesUsuario(planes);
     grabarDatosServer(usuario);
-    //console.log(usuario);
 }
 
 function borrarStorage() {
     localStorage.removeItem("usuario");
     localStorage.removeItem("tasasInversion");
+    document.getElementById("bienvenida").innerHTML = `Bienvenido, te ayudamos a elegir la mejor manera de financiar tus gastos`
 }
 
 //desgrabado de los datos, si destilda el recordar
@@ -258,11 +245,6 @@ function almacenamientoDatos() {
 function validarFormulario(e) {
     e.preventDefault();
     datos(e);
-    //grabado de los datos, si pone recordar
-    let checkDatos = document.getElementById("impCheckDatos".value)
-    if (document.getElementById("impCheckDatos").checked) {
-        grabarStorage()
-    }
 }
 
 function datos(e) {
@@ -322,11 +304,14 @@ function datos(e) {
                             break;
                     }
                     if (cantidadCuotas >= 1 && cantidadCuotas <= 3) {
-                        //"Perfecto, vamos a ayudarte en tu plan " + eleccionLetras + " de nombre " + nombrePlan + " por un total de " + montoGasto.toString() + " y en " + eleccionCuotas
-                        //cargo la informacion y creo el plan, podría crear varios, estilo carrito de compras y calcular varios planes y un plan general.
                         planes.push(new Plan(nombre, eleccion, nombrePlan, montoGasto, cantidadCuotas));
-                        //procedo a calcular
                         calcular();
+                        if (document.getElementById("impCheckDatos").checked) {
+                            //almaceno los datos de tasa y usuario en local
+                            grabarStorage()
+                            //grabo la simulacion en el servidor con el usuario
+                            grabarServer()
+                        }
                     }
                 } else {
                     let esMayor = (montoGasto > 2000000)
@@ -352,5 +337,15 @@ function datos(e) {
         datosResultados = document.getElementById("resultado-simulacion");
         datosResultados.innerHTML = `<div class=${classEvento}>` + mensajeError;
         mensajeAlerta("El simulador, necesita más datos", false);
+    }
+}
+
+let asignarValoresPlan = (usuario) => {
+    for (let index = 0; index < usuario.planesUsuario.length; index++) {
+        item = usuario.planesUsuario[index];
+        document.getElementById("impSelDeseo").value = item.tipo;
+        document.getElementById("impNomPlan").value = item.deseo
+        document.getElementById("impPrecioPlan").value = item.monto;
+        document.getElementById("impSelCantCuotas").value = item.financiacion;
     }
 }

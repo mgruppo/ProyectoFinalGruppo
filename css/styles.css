@@ -16,7 +16,7 @@ body {
   background: linear-gradient(to right, #7269bd, #536cb4, #3c6da6, #316b94, #346782); }
 
 /*se utiliza extend para extender los estilos de margenes, sombra, span y aumentar tamaño de objetos en escala*/
-.titulo-1, .titulo-2, .titulo-3, .principal .formulario, .principal .section-2, .principal .section-3 {
+.titulo-1, .titulo-2, .titulo-3, .principal .formulario, .principal .section-2 {
   margin: 0.5rem;
   padding: 1rem; }
 
@@ -94,11 +94,6 @@ footer {
     font-weight: bold; }
   .principal .section-2 {
     text-align: center; }
-  .principal .section-3 {
-    text-align: center; }
-    .principal .section-3 .tabla-simulacion {
-      border-collapse: collapse;
-      width: 100%; }
 
 /*boton general, para igualar el formato de todos los botones*/
 .boton-principal {

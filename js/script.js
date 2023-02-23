@@ -1,4 +1,4 @@
-/*Para la pre entrega 3, y como idea de proyecto, se trabaja bajo la necesidad de contar con una plataforma
+/*Para la entrega final, y como idea de proyecto, se trabaja bajo la necesidad de contar con una plataforma
 que dependiendo la elección de gasto que la persona desea realizar,
 la plataforma le recomienda posibilidades de pagar con tarjeta, en una cuota o más o elegir invertir en un fondo común de inversión*/
 
@@ -60,10 +60,6 @@ class Usuario {
         this.planesUsuario = planesUsuario;
         return this.planesUsuario
     }
-    setSumoPlan(planesUsuario) {
-        this.planesUsuario.push(planesUsuario);
-        return this.planesUsuario 
-    }
 }
 
 document.getElementById("loader").style.display = "none";
@@ -72,7 +68,7 @@ document.getElementById("loader").style.display = "none";
 //eso es porque si guardo el nombre, brindo una mejor experiencia al inicio nuevamente
 let usurioLocalStorage = JSON.parse(localStorage.getItem("usuario"))
 
-if (usurioLocalStorage) { //Si Nombre tiene contenido, entonces lo muestro
+if (usurioLocalStorage) {
     let usuario = new Usuario(usurioLocalStorage.nombre)
     asignarValoresInputs(usuario)
 } else {
@@ -80,17 +76,15 @@ if (usurioLocalStorage) { //Si Nombre tiene contenido, entonces lo muestro
     asignarValoresInputs(usuario)
 }
 
-//para completar el combobox de tasas de intereses
 llenarCombo("tasas-select", tasasInversion);
 
 document.getElementById("impCheckDatos").addEventListener('change', almacenamientoDatos)
 
 let botonEliminarTasa = document.getElementById("btn-eliminar-tasa");
-botonEliminarTasa.addEventListener("click", () => {
-    //recupero valor del combo    
+botonEliminarTasa.addEventListener("click", () => { 
     let combo = document.getElementById("tasas-select");
-    let valorEliminar = combo.value; //El valor seleccionado
-    let textoEliminar = combo.options[combo.selectedIndex].innerText; //El texto de la opción seleccionada
+    let valorEliminar = combo.value;
+    let textoEliminar = combo.options[combo.selectedIndex].innerText;
     //utilizo sweetalert2 como mensaje para validar
     Swal.fire({
         title: 'Está seguro de borrar la tasa de nombre ' + textoEliminar + '?',
@@ -127,6 +121,25 @@ botonAgregarTasa.addEventListener("click", () => {
             nuevaTasa(tasaNum, tasaText, tasasInversion);
         }
     })
+})
+
+document.getElementById("btn-traer-ultima-simulacion").addEventListener("click", () => {
+    if (document.getElementById("impNomPersona").value.trim() != "") {
+        let nomPersona = student + document.getElementById("impNomPersona").value
+        buscarUsuario(nomPersona)
+    } else {
+        mensajeAlerta("Debe ingresar un nombre en el formulario", false);
+    }
+});
+
+document.getElementById("btn-borrar-ultima-simulacion").addEventListener("click", () => {
+    if (document.getElementById("impNomPersona").value.trim() != "") {
+        deleteUsuario(nomPersona);
+        borrarStorage();
+        document.getElementById('form-simulacion').reset();
+    } else {
+        mensajeAlerta("Debe ingresar un nombre en el formulario", false);
+    }
 })
 
 let simulaForm = document.getElementById("form-simulacion");
