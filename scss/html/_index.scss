@@ -23,5 +23,15 @@
     .section-2 {
         text-align: center;
         @extend %estilos-margenes;
+        .p-tres {
+            span {
+                font-weight: bold;
+            }   
+        }
+    }
+
+    .section-3 {
+        text-align: center;
+        @extend %estilos-margenes;
     }
 }

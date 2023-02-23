@@ -16,7 +16,7 @@ body {
   background: linear-gradient(to right, #7269bd, #536cb4, #3c6da6, #316b94, #346782); }
 
 /*se utiliza extend para extender los estilos de margenes, sombra, span y aumentar tamaño de objetos en escala*/
-.titulo-1, .titulo-2, .titulo-3, .principal .formulario, .principal .section-2 {
+.titulo-1, .titulo-2, .titulo-3, .principal .formulario, .principal .section-2, .principal .section-3 {
   margin: 0.5rem;
   padding: 1rem; }
 
@@ -93,6 +93,10 @@ footer {
   .principal .section-1 .resultado-1 span {
     font-weight: bold; }
   .principal .section-2 {
+    text-align: center; }
+    .principal .section-2 .p-tres span {
+      font-weight: bold; }
+  .principal .section-3 {
     text-align: center; }
 
 /*boton general, para igualar el formato de todos los botones*/
