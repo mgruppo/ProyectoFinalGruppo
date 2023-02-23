@@ -81,7 +81,7 @@ llenarCombo("tasas-select", tasasInversion);
 document.getElementById("impCheckDatos").addEventListener('change', almacenamientoDatos)
 
 let botonEliminarTasa = document.getElementById("btn-eliminar-tasa");
-botonEliminarTasa.addEventListener("click", () => { 
+botonEliminarTasa.addEventListener("click", () => {
     let combo = document.getElementById("tasas-select");
     let valorEliminar = combo.value;
     let textoEliminar = combo.options[combo.selectedIndex].innerText;
@@ -134,6 +134,7 @@ document.getElementById("btn-traer-ultima-simulacion").addEventListener("click",
 
 document.getElementById("btn-borrar-ultima-simulacion").addEventListener("click", () => {
     if (document.getElementById("impNomPersona").value.trim() != "") {
+        let nomPersona = student + document.getElementById("impNomPersona").value
         deleteUsuario(nomPersona);
         borrarStorage();
         document.getElementById('form-simulacion').reset();
